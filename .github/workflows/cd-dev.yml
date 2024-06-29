@@ -1,0 +1,60 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [ "dev" ]
+
+jobs:
+  build:
+    ## checkout후 자바 21 버전으로 설정을 합니다
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      ## gradlew 의 권한을 줍니다.
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      ## gradle build
+      - name: Build with Gradle
+        run: ./gradlew clean build --debug
+        env:
+          DB_URL: ${{ secrets.DB_URL }}
+          DB_USER: ${{ secrets.DB_USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+
+      ## 이미지 태그에 시간 설정을 하기위해서 현재 시간을 가져옵니다.
+      - name: Get current time
+        uses: 1466587594/get-current-time@v2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Show Current Time
+        run: echo "CurrentTime=${{steps.current-time.outputs.formattedTime}}"
+      ## AWS에 로그인. aws-region은 서울로 설정(ap-northeast-2)
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ap-northeast-2
+      ## ECR에 로그인
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      ## sample라는 ECR 리파지터리에 현재 시간 태그를 생성하고, 푸쉬
+      ## 앞의 스탭에서 ${{steps.current-time.outputs.formattedTime}}로 현재 시간을 가져옵니다.
+      - name: Build, tag, and push image to Amazon ECR
+        run: |
+          docker build --build-arg PASSWORD=$PASSWORD -t polabo:${{steps.current-time.outputs.formattedTime}} .
+          docker tag polabo:${{steps.current-time.outputs.formattedTime}} 058264417437.dkr.ecr.ap-northeast-2.amazonaws.com/polabo:${{steps.current-time.outputs.formattedTime}}
+          docker push 058264417437.dkr.ecr.ap-northeast-2.amazonaws.com/polabo:${{steps.current-time.outputs.formattedTime}}
+        env:
+          PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
