@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    environment: dev
     ## checkout후 자바 21 버전으로 설정을 합니다
     runs-on: ubuntu-latest
     steps:
