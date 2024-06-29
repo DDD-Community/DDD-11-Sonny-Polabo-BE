@@ -36,10 +36,7 @@ jobs:
 
       ## gradle build
       - name: Build with Gradle
-        run: ./gradlew clean build -x test --info
-
-      - name: List build/libs directory
-        run: ls -la build/libs
+        run: ./gradlew clean build -x test
 
       ## 이미지 태그에 시간 설정을 하기위해서 현재 시간을 가져옵니다.
       - name: Get current time
