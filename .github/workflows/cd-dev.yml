@@ -36,7 +36,7 @@ jobs:
 
       ## gradle build
       - name: Build with Gradle
-        run: ./gradlew clean bootJar
+        run: ./gradlew clean build -x test --info
 
       - name: List build/libs directory
         run: ls -la build/libs
