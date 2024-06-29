@@ -1,0 +1,34 @@
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: ENC(X2FpAk74GuXAycAhIQA10hnzAdRj1ftWqILNqC7oQagciq3msqQ7iUJ8oGozxeBqtXb9rx9R7tF88KpemlvML4OTAFhUBUPGgjZ1/CwobQJtdjYx0tXXyOzZpwQXI+U867G4dEB33tbpcFRZt4Ww9vElUSsAZnMWRdfBu2x8TyHzSZDO0V8H2CYqt7qdSJxtW0PsKI4/iwSvAGYND9cwJz/iGsHIuUVAOf7dmd6uzXrovuHF3H4jfw==)
+    username: ENC(6B0VWBlhLIFr2ynq8c8jug==)
+    password: ENC(klG0liQdqtFK3VDxA89xC1ZIYYzUIz08)
+    hikari:
+      minimum-idle: 2
+      maximum-pool-size: 2
+#  jpa:
+#    hibernate:
+#      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+#      ddl-auto: none
+#    show-sql: true
+#    properties:
+#      hibernate:
+#        format_sql: true
+  jooq:
+    sql-dialect: mysql
+
+cloud:
+  aws:
+    credentials:
+      access-key: ENC(PkcItbhMBDzk8j3pjYqRITA5f560l3HOe5rJDCuhxxA=)
+      secret-key: ENC(f7qtLdA9YxsjCmV7lNEBnNJlWFeZHl9ztH8Mbe8dgK0N8LJSo8VfrKqlNZKR58fP+fXcxrOJP10=)
+    s3:
+      bucket: ENC(nLu55KOteQJS+LGFKjfITxZdfaWyZV6C)
+    region:
+      static: ap-northeast-2
+
+running:
+  name: dev
