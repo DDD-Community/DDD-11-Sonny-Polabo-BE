@@ -21,12 +21,7 @@ jobs:
 
       ## gradle build
       - name: Build with Gradle
-        run: ./gradlew clean build --debug
-        env:
-          DB_URL: ${{ secrets.DB_URL }}
-          DB_USER: ${{ secrets.DB_USER }}
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          JASYPT_ENCRYPTOR_PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+        run: ./gradlew clean build -PDB_URL=${{ secrets.DB_URL }} -PDB_USER=${{ secrets.DB_USER }} -PDB_PASSWORD=${{ secrets.DB_PASSWORD }} -PJASYPT_ENCRYPTOR_PASSWORD=${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
 
       ## 이미지 태그에 시간 설정을 하기위해서 현재 시간을 가져옵니다.
       - name: Get current time
