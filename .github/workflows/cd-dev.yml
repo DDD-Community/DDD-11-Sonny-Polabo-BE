@@ -27,8 +27,8 @@ jobs:
 
       - name: Increase Gradle memory settings
         run: |
-          echo "org.gradle.jvmargs=-Xmx2g -Dfile.encoding=UTF-8" >> ~/.gradle/gradle.properties
-          echo "kotlin.daemon.jvmargs=-Xmx2g" >> ~/.gradle/gradle.properties
+          echo "org.gradle.jvmargs=-Xmx4g -Dfile.encoding=UTF-8" >> ~/.gradle/gradle.properties
+          echo "kotlin.daemon.jvmargs=-Xmx4g" >> ~/.gradle/gradle.properties
 
       ## gradlew 의 권한을 줍니다.
       - name: Grant execute permission for gradlew
