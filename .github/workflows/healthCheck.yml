@@ -1,11 +1,8 @@
 name: "[운영] 헬스체크"
 
 on:
-  workflow_dispatch:
-
-# on:
-#   schedule:
-#     - cron: "0 0 */3 * *"
+  schedule:
+    - cron: "0 0 */3 * *"
 
 jobs:
   healthcheck:
