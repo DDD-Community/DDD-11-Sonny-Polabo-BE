@@ -7,8 +7,8 @@ plugins {
     id("io.spring.dependency-management") version "1.1.5"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.spring") version kotlinVersion
-    kotlin("plugin.jpa") version kotlinVersion
-    kotlin("plugin.allopen") version kotlinVersion
+//    kotlin("plugin.jpa") version kotlinVersion
+//    kotlin("plugin.allopen") version kotlinVersion
     kotlin("kapt") version kotlinVersion
     id("nu.studer.jooq") version "9.0"
 }
@@ -59,11 +59,11 @@ jooq {
     }
 }
 
-allOpen {
-    annotation("jakarta.persistence.Entity")
-    annotation("jakarta.persistence.MappedSuperclass")
-    annotation("jakarta.persistence.Embeddable")
-}
+//allOpen {
+//    annotation("jakarta.persistence.Entity")
+//    annotation("jakarta.persistence.MappedSuperclass")
+//    annotation("jakarta.persistence.Embeddable")
+//}
 
 repositories {
     mavenCentral()
@@ -96,13 +96,10 @@ tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs += "-Xjsr305=strict"
         jvmTarget = "21"
+        kotlinDaemonJvmArguments = listOf("-Xmx4096m", "-Xms2560m", "-XX:+UseParallelGC")
     }
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
-}
-
-tasks.withType<Jar> {
-    enabled = false
 }

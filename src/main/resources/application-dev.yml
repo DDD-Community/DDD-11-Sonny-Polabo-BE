@@ -3,7 +3,7 @@ spring:
     activate:
       on-profile: dev
   datasource:
-    url: ENC(X2FpAk74GuXAycAhIQA10hnzAdRj1ftWqILNqC7oQagciq3msqQ7iUJ8oGozxeBqtXb9rx9R7tF88KpemlvML4OTAFhUBUPGgjZ1/CwobQJtdjYx0tXXyOzZpwQXI+U867G4dEB33tbpcFRZt4Ww9vElUSsAZnMWRdfBu2x8TyHzSZDO0V8H2CYqt7qdSJxtW0PsKI4/iwSvAGYND9cwJz/iGsHIuUVAOf7dmd6uzXrovuHF3H4jfw==)
+    url: ENC(pz7EEQu20leZT3uKvGuyvt7YhmLSOJ03yp09o3HSmvk8QqSORYES8Y0iqtjYt3An0uSXVGvd+PdNxXF4h1KXbLm6aMSl2K9gWh2XR5GbIpPAKasqkuha20MGAVckb9NRQC3s0IowzCMvt+jOv0Z1RrAnsfzJy08ZbWe41Slcz/VaQU1hSF6HVohMUrBPApDELlW558sM0jWPfi7NPYNGSlyB4f3bYa0WqjOIAAKPVb3ptvrQwmN7Wg==)
     username: ENC(6B0VWBlhLIFr2ynq8c8jug==)
     password: ENC(klG0liQdqtFK3VDxA89xC1ZIYYzUIz08)
     hikari:
