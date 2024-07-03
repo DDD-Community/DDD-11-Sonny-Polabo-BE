@@ -19,18 +19,9 @@ jobs:
           max-attempts: 3
           retry-delay: 1s
 
-      - name: Set status message
-        id: set_message
-        run: |
-          if [ "${{ steps.health_check.outputs.conclusion }}" == "OKSuccess" ]; then
-            echo "::set-output name=message::Health check succeeded"
-          else
-            echo "::set-output name=message::Health check failed"
-          fi
-
       - name: Discord Webhook Action
         if: always()
         uses: tsickert/discord-webhook@v5.3.0
         with:
           webhook-url: ${{ secrets.WEBHOOK_URL }}
-          content: ${{ steps.set_message.outputs.message }}
+          content: ${{ job.status }}
