@@ -13,3 +13,6 @@ logging:
 jasypt:
   encryptor:
     bean: jasyptStringEncryptor
+
+limit:
+  count: 100

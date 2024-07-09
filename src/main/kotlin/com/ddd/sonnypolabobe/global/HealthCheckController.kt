@@ -8,6 +8,7 @@ class HealthCheckController {
 
     @GetMapping("/health")
     fun healthCheck(): String {
-        return "OK"
+        throw RuntimeException("error")
+//        return "OK"
     }
 }

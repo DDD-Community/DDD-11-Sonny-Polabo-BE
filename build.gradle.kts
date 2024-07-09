@@ -89,7 +89,8 @@ dependencies {
     implementation("software.amazon.awssdk:s3:2.20.68")
     implementation("com.amazonaws:aws-java-sdk-s3:1.12.561")
     implementation("com.github.ulisesbocchio:jasypt-spring-boot-starter:3.0.5")
-
+    implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("io.netty:netty-resolver-dns-native-macos:4.1.68.Final:osx-aarch_64")
 }
 
 tasks.withType<KotlinCompile> {

@@ -2,6 +2,7 @@ package com.ddd.sonnypolabobe.domain.board.repository
 
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardCreateRequest
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
+import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.global.util.UuidConverter
 import com.ddd.sonnypolabobe.global.util.UuidGenerator
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Board
@@ -22,7 +23,7 @@ class BoardJooqRepositoryImpl(
         val insertValue = jBoard.newRecord().apply {
             this.id = id
             this.title = request.title
-            this.createdAt = LocalDateTime.now()
+            this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
             this.yn = 1
             this.activeyn = 1
         }
