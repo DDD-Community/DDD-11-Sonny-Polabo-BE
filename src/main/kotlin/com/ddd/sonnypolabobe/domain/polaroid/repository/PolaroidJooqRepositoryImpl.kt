@@ -3,6 +3,7 @@ package com.ddd.sonnypolabobe.domain.polaroid.repository
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
 import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
+import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import com.ddd.sonnypolabobe.jooq.polabo.tables.records.PolaroidRecord
 import org.jooq.DSLContext
@@ -17,7 +18,7 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.boardId = boardId
             this.imageKey = request.imageKey
             this.oneLineMessage = request.oneLineMessage
-            this.createdAt = LocalDateTime.now()
+            this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
             this.yn = 1
             this.activeyn = 1
         }

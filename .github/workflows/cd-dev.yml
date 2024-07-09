@@ -64,7 +64,21 @@ jobs:
       - name: Build, tag, and push image to Amazon ECR
         run: |
           docker build --build-arg PASSWORD=$PASSWORD -t polabo:${{steps.current-time.outputs.formattedTime}} .
-          docker tag polabo:${{steps.current-time.outputs.formattedTime}} 058264417437.dkr.ecr.ap-northeast-2.amazonaws.com/polabo:${{steps.current-time.outputs.formattedTime}}
-          docker push 058264417437.dkr.ecr.ap-northeast-2.amazonaws.com/polabo:${{steps.current-time.outputs.formattedTime}}
+          docker tag polabo:${{steps.current-time.outputs.formattedTime}} ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
+          docker push ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
         env:
           PASSWORD: ${{ secrets.JASYPT_ENCRYPTOR_PASSWORD }}
+
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          script: |
+            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}/${{ secrets.ECR_REPOSITORY }}
+            docker stop polabo-dev
+            docker rm polabo-dev
+            docker pull ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
+            docker run -d -v /etc/localtime:/etc/localtime:ro -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro -e ENVIRONMENT_VALUE=-Dspring.profiles.active=dev --name polabo-dev -p 8080:8080 --restart=always --network host ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
+        
