@@ -43,20 +43,20 @@ class LoggingFilter(
                         "Response body : ${getResponseBody(responseWrapper)}"
             )
 
-            if(responseWrapper.status >= 400) {
-                this.discordApiClient.sendErrorLog(
-                    HttpLog(
-                        request.method,
-                        request.requestURI,
-                        responseWrapper.status,
-                        (endedAt - startedAt) / 10000.0,
-                        getHeaders(request),
-                        getRequestParams(request),
-                        getRequestBody(requestWrapper),
-                        getResponseBody(responseWrapper)
-                    )
-                )
-            }
+//            if(responseWrapper.status >= 400) {
+//                this.discordApiClient.sendErrorLog(
+//                    HttpLog(
+//                        request.method,
+//                        request.requestURI,
+//                        responseWrapper.status,
+//                        (endedAt - startedAt) / 10000.0,
+//                        getHeaders(request),
+//                        getRequestParams(request),
+//                        getRequestBody(requestWrapper),
+//                        getResponseBody(responseWrapper)
+//                    )
+//                )
+//            }
         }
     }
 
