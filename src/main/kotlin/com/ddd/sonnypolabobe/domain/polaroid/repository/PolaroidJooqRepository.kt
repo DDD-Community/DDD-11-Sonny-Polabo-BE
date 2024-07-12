@@ -6,4 +6,5 @@ import com.ddd.sonnypolabobe.jooq.polabo.tables.records.PolaroidRecord
 interface PolaroidJooqRepository {
     fun insertOne(boardId: ByteArray, request: PolaroidCreateRequest): Long
     fun selectOneById(id: Long): PolaroidRecord
+    fun countByBoardId(uuidToByteArray: ByteArray): Int
 }

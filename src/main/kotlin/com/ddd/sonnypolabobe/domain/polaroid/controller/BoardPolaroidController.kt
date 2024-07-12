@@ -4,6 +4,7 @@ import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateReques
 import com.ddd.sonnypolabobe.domain.polaroid.service.PolaroidService
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -14,7 +15,7 @@ class BoardPolaroidController(private val polaroidService: PolaroidService) {
         폴라로이드를 생성합니다.
     """)
     @PostMapping
-    fun create(@PathVariable boardId : String, @RequestBody request : PolaroidCreateRequest)
+    fun create(@PathVariable boardId : String, @RequestBody @Valid request : PolaroidCreateRequest)
     = ApplicationResponse.ok(this.polaroidService.create(boardId, request))
 
 }

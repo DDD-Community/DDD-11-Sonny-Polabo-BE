@@ -20,27 +20,19 @@ class BoardService(
 
     fun getById(id: String): List<BoardGetResponse> {
         return id.run {
-            val result = boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
-            result.map {
-                val polaroidId = it.value2()
-                if (polaroidId != null) {
-                    BoardGetResponse(
-                        title = it.value1() ?: "폴라보의 보드",
-                        items = listOf(
-                            PolaroidGetResponse(
-                                id = polaroidId,
-                                imageUrl = it.value3()?.let { it1 -> s3Util.getImgUrl(it1) } ?: "",
-                                oneLineMessage = it.value4() ?: "폴라보와의 추억 한 줄",
-                                userId = it.value6()?.let { it1 -> UuidConverter.byteArrayToUUID(it1) },
-                            )
-                        )
-                    )
-                } else {
-                    BoardGetResponse(
-                        title = it.value1() ?: "폴라보의 보드",
-                        items = emptyList()
+            val queryResult = boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
+            val groupByTitle = queryResult.groupBy { it.value1() }
+            groupByTitle.map { entry ->
+                val title = entry.key
+                val polaroids = entry.value.map {
+                    PolaroidGetResponse(
+                        id = it.value2() ?: 0L,
+                        imageUrl = it.value3()?.let { it1 -> s3Util.getImgUrl(it1) } ?: "",
+                        oneLineMessage = it.value4() ?: "폴라보와의 추억 한 줄",
+                        userId = it.value6()?.let { it1 -> UuidConverter.byteArrayToUUID(it1) }
                     )
                 }
+                BoardGetResponse(title = title ?: "", items = polaroids)
             }
         }
     }

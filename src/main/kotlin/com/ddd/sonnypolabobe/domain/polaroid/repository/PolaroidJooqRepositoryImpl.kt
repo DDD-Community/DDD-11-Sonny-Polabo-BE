@@ -40,4 +40,17 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             .fetchOne()?.original()
             ?: throw ApplicationException(CustomErrorCode.POLAROID_NOT_FOUND)
     }
+
+    override fun countByBoardId(uuidToByteArray: ByteArray): Int {
+        val jPolaroid = Polaroid.POLAROID
+        return this.dslContext
+            .selectCount()
+            .from(jPolaroid)
+            .where(
+                jPolaroid.BOARD_ID.eq(uuidToByteArray)
+                    .and(jPolaroid.YN.eq(1))
+                    .and(jPolaroid.ACTIVEYN.eq(1))
+            )
+            .fetchOne(0, Int::class.java) ?: 0
+    }
 }
