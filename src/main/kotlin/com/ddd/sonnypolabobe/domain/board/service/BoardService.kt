@@ -37,8 +37,6 @@ class BoardService(
         }
     }
 
-    fun getTotalCount(): String {
-        return this.boardJooqRepository.selectTotalCount().toString()
-    }
+    fun getTotalCount(): Long = this.boardJooqRepository.selectTotalCount()
 
 }
