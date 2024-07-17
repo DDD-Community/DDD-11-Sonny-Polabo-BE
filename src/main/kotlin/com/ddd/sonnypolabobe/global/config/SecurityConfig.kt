@@ -34,6 +34,7 @@ class SecurityConfig() {
             .build()
     }
 
+    @Bean
     fun corsConfigurationSource(): UrlBasedCorsConfigurationSource {
         val configuration = CorsConfiguration()
         configuration.allowedOrigins = listOf("http://localhost:3000", "https://polabo.site",
