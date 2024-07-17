@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.global.security
 
+import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DiscordApiClient
 import com.ddd.sonnypolabobe.global.util.HttpLog
 import com.ddd.sonnypolabobe.logger
@@ -20,7 +21,7 @@ import java.util.*
 class LoggingFilter(
     private val discordApiClient: DiscordApiClient
 ) : GenericFilterBean() {
-    private val excludedUrls = setOf("/actuator", "/swagger-ui")
+    private val excludedUrls = setOf("/actuator", "/swagger-ui", "/v3/api-docs")
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val requestWrapper: ContentCachingRequestWrapper =
@@ -43,25 +44,25 @@ class LoggingFilter(
                         "Response body : ${getResponseBody(responseWrapper)}"
             )
 
-//            if(responseWrapper.status >= 400) {
-//                this.discordApiClient.sendErrorLog(
-//                    HttpLog(
-//                        request.method,
-//                        request.requestURI,
-//                        responseWrapper.status,
-//                        (endedAt - startedAt) / 10000.0,
-//                        getHeaders(request),
-//                        getRequestParams(request),
-//                        getRequestBody(requestWrapper),
-//                        getResponseBody(responseWrapper)
-//                    )
-//                )
-//            }
+            if(responseWrapper.status >= 400 && getResponseBody(responseWrapper).contains(CustomErrorCode.INTERNAL_SERVER_EXCEPTION.message)) {
+                this.discordApiClient.sendErrorLog(
+                    HttpLog(
+                        request.method,
+                        request.requestURI,
+                        responseWrapper.status,
+                        (endedAt - startedAt) / 10000.0,
+                        getHeaders(request),
+                        getRequestParams(request),
+                        getRequestBody(requestWrapper),
+                        getResponseBody(responseWrapper)
+                    )
+                )
+            }
         }
     }
 
     private fun excludeLogging(requestURI: String): Boolean {
-        return excludedUrls.contains(requestURI)
+        return excludedUrls.any { requestURI.startsWith(it) }
     }
 
     private fun getResponseBody(response: ContentCachingResponseWrapper): String {

@@ -31,7 +31,7 @@ class BoardService(
                         oneLineMessage = it.value4() ?: "폴라보와의 추억 한 줄",
                         userId = it.value6()?.let { it1 -> UuidConverter.byteArrayToUUID(it1) }
                     )
-                }
+                }.filter { it.id != 0L }
                 BoardGetResponse(title = title ?: "", items = polaroids)
             }
         }
