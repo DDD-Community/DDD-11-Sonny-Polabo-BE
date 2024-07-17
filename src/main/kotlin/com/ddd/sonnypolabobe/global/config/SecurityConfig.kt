@@ -3,12 +3,14 @@ package com.ddd.sonnypolabobe.global.config
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher
 import org.springframework.security.web.util.matcher.RequestMatcher
 import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 
 @Configuration
@@ -18,9 +20,7 @@ class SecurityConfig() {
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
-            .cors {
-                it.configurationSource(corsConfigurationSource())
-            }
+            .cors {}
             .csrf{
                 it.disable()
             }
@@ -35,19 +35,26 @@ class SecurityConfig() {
     }
 
     @Bean
-    fun corsConfigurationSource(): UrlBasedCorsConfigurationSource {
-        val configuration = CorsConfiguration()
-        configuration.allowedOrigins = listOf("http://localhost:3000", "https://polabo.site",
-            "http://polabo.site", "http://dev.polabo.site", "https://dev.polabo.site") // Allow all origins
-        configuration.allowedMethods =
-            listOf("GET", "POST", "PUT", "DELETE", "OPTIONS") // Allow common methods
-        configuration.allowedHeaders = listOf("*") // Allow all headers
-        configuration.allowCredentials = true // Allow credentials
+    fun corsConfigurationSource(): CorsConfigurationSource {
+
+        val configuration = CorsConfiguration().apply {
+            allowCredentials = true
+            allowedOrigins = listOf("http://localhost:3000", "https://polabo.site",
+                "http://polabo.site", "http://dev.polabo.site", "https://dev.polabo.site")
+            allowedMethods = listOf(
+                HttpMethod.POST.name(),
+                HttpMethod.GET.name(),
+                HttpMethod.PUT.name(),
+                HttpMethod.DELETE.name(),
+                HttpMethod.OPTIONS.name()
+            )
+            allowedHeaders = listOf("*")
+        }
+
         val source = UrlBasedCorsConfigurationSource()
-        source.registerCorsConfiguration(
-            "/**",
-            configuration
-        ) // Apply configuration to all endpoints
+        source.registerCorsConfiguration("/**", configuration)
+
         return source
+
     }
 }
