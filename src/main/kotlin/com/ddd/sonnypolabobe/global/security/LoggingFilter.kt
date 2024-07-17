@@ -20,7 +20,7 @@ import java.util.*
 class LoggingFilter(
     private val discordApiClient: DiscordApiClient
 ) : GenericFilterBean() {
-    private val excludedUrls = setOf("/actuator", "/swagger-ui")
+    private val excludedUrls = setOf("/actuator", "/swagger-ui", "/v3/api-docs")
 
     override fun doFilter(request: ServletRequest, response: ServletResponse, chain: FilterChain) {
         val requestWrapper: ContentCachingRequestWrapper =
@@ -61,7 +61,7 @@ class LoggingFilter(
     }
 
     private fun excludeLogging(requestURI: String): Boolean {
-        return excludedUrls.contains(requestURI)
+        return excludedUrls.any { requestURI.startsWith(it) }
     }
 
     private fun getResponseBody(response: ContentCachingResponseWrapper): String {
