@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.global.security
 
+import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DiscordApiClient
 import com.ddd.sonnypolabobe.global.util.HttpLog
 import com.ddd.sonnypolabobe.logger
@@ -43,20 +44,20 @@ class LoggingFilter(
                         "Response body : ${getResponseBody(responseWrapper)}"
             )
 
-//            if(responseWrapper.status >= 400) {
-//                this.discordApiClient.sendErrorLog(
-//                    HttpLog(
-//                        request.method,
-//                        request.requestURI,
-//                        responseWrapper.status,
-//                        (endedAt - startedAt) / 10000.0,
-//                        getHeaders(request),
-//                        getRequestParams(request),
-//                        getRequestBody(requestWrapper),
-//                        getResponseBody(responseWrapper)
-//                    )
-//                )
-//            }
+            if(responseWrapper.status >= 400 && getResponseBody(responseWrapper).contains(CustomErrorCode.INTERNAL_SERVER_EXCEPTION.message)) {
+                this.discordApiClient.sendErrorLog(
+                    HttpLog(
+                        request.method,
+                        request.requestURI,
+                        responseWrapper.status,
+                        (endedAt - startedAt) / 10000.0,
+                        getHeaders(request),
+                        getRequestParams(request),
+                        getRequestBody(requestWrapper),
+                        getResponseBody(responseWrapper)
+                    )
+                )
+            }
         }
     }
 

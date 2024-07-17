@@ -14,7 +14,7 @@ class GlobalExceptionHandler(
 ) {
     @ExceptionHandler(ApplicationException::class)
     fun applicationException(ex: ApplicationException): ResponseEntity<ApplicationResponse<Error>> {
-        logger().info("error : ${ex.error}")
+        logger().error("error : ${ex.error}")
         this.discordApiClient.sendErrorTrace(
             ex.error.code, ex.message,
             ex.stackTrace.contentToString()
@@ -24,7 +24,7 @@ class GlobalExceptionHandler(
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun validationException(ex: MethodArgumentNotValidException): ResponseEntity<ApplicationResponse<Error>> {
-        logger().info("error : ${ex.bindingResult.allErrors[0].defaultMessage}")
+        logger().error("error : ${ex.bindingResult.allErrors[0].defaultMessage}")
         return ResponseEntity.status(CustomErrorCode.INVALID_VALUE_EXCEPTION.status)
             .body(
                 ApplicationResponse.error(
@@ -36,7 +36,7 @@ class GlobalExceptionHandler(
 
     @ExceptionHandler(RuntimeException::class)
     fun runtimeException(ex: RuntimeException): ResponseEntity<ApplicationResponse<Error>> {
-        logger().info("error : ${ex.message}")
+        logger().error("error : ${ex.message}")
         this.discordApiClient.sendErrorTrace(
             "500", ex.message,
             ex.stackTrace.contentToString()
