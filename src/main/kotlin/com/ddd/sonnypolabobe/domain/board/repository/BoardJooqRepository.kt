@@ -9,4 +9,5 @@ interface BoardJooqRepository {
     fun insertOne(request: BoardCreateRequest): ByteArray?
     fun selectOneById(id: UUID) : Array<out Record6<String?, Long?, String?, String?, LocalDateTime?, ByteArray?>>
     fun selectTotalCount(): Long
+    fun selectTodayTotalCount(): Long
 }

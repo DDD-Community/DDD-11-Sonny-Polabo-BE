@@ -55,6 +55,7 @@ class BoardJooqRepositoryImpl(
                 jBoard.ID.eq(UuidConverter.uuidToByteArray(id)).and(jBoard.YN.eq(1))
                     .and(jBoard.ACTIVEYN.eq(1))
             )
+            .orderBy(jPolaroid.CREATED_AT.desc())
             .fetchArray()
 
     }
@@ -66,5 +67,19 @@ class BoardJooqRepositoryImpl(
             .from(jBoard)
             .where(jBoard.YN.eq(1).and(jBoard.ACTIVEYN.eq(1)))
             .fetchOne(0, Long::class.java) ?: 0
+    }
+
+    override fun selectTodayTotalCount(): Long {
+        val jBoard = Board.BOARD
+        return this.dslContext
+            .selectCount()
+            .from(jBoard)
+            .where(
+                jBoard.CREATED_AT.greaterOrEqual(DateConverter.convertToKst(LocalDateTime.now().withHour(0).withMinute(0).withSecond(0)))
+                    .and(jBoard.CREATED_AT.lessThan(DateConverter.convertToKst(LocalDateTime.now().withHour(23).withMinute(59).withSecond(59)))
+                    .and(jBoard.YN.eq(1))
+                    .and(jBoard.ACTIVEYN.eq(1))
+            ))
+            .fetchOne(0, Long::class.java) ?: 0L
     }
 }
