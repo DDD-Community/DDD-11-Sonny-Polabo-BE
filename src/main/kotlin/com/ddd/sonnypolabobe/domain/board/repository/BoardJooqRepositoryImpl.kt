@@ -55,6 +55,7 @@ class BoardJooqRepositoryImpl(
                 jBoard.ID.eq(UuidConverter.uuidToByteArray(id)).and(jBoard.YN.eq(1))
                     .and(jBoard.ACTIVEYN.eq(1))
             )
+            .orderBy(jPolaroid.CREATED_AT.desc())
             .fetchArray()
 
     }
