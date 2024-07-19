@@ -6,13 +6,16 @@ import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
 import com.ddd.sonnypolabobe.global.util.S3Util
 import com.ddd.sonnypolabobe.global.util.UuidConverter
+import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
 class BoardService(
     private val boardJooqRepository: BoardJooqRepository,
-    private val s3Util: S3Util
+    private val s3Util: S3Util,
+    @Value("\${limit.count}")
+    private val limit: Int
 ) {
     fun create(request: BoardCreateRequest): UUID? {
         return this.boardJooqRepository.insertOne(request)?.let { UuidConverter.byteArrayToUUID(it) }
@@ -38,5 +41,10 @@ class BoardService(
     }
 
     fun getTotalCount(): Long = this.boardJooqRepository.selectTotalCount()
+    fun createAvailable(): Long {
+        return this.boardJooqRepository.selectTodayTotalCount().let {
+            if (it > limit) 0 else limit - it
+        }
+    }
 
 }

@@ -39,4 +39,10 @@ class BoardController(
     """)
     @GetMapping("/total-count")
     fun getTotalCount() = ApplicationResponse.ok(this.boardService.getTotalCount())
+
+    @Operation(summary = "오늘 생성 가능한 보드 수 조회", description = """
+        오늘 생성 가능한 보드 수를 조회합니다.
+    """)
+    @GetMapping("/create-available")
+    fun createAvailable() = ApplicationResponse.ok(this.boardService.createAvailable())
 }
