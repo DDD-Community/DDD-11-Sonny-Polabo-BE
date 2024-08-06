@@ -2,6 +2,7 @@ package com.ddd.sonnypolabobe.domain.board.repository
 
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardCreateRequest
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
+import com.ddd.sonnypolabobe.domain.board.my.dto.MyBoardDto
 import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.global.util.UuidConverter
 import com.ddd.sonnypolabobe.global.util.UuidGenerator
@@ -34,7 +35,7 @@ class BoardJooqRepositoryImpl(
         return if (result == 1) id else null
     }
 
-    override fun selectOneById(id: UUID): Array<out Record6<String?, Long?, String?, String?, LocalDateTime?, ByteArray?>> {
+    override fun selectOneById(id: UUID): Array<out Record6<String?, Long?, String?, String?, LocalDateTime?, Long?>> {
         val jBoard = Board.BOARD
         val jPolaroid = Polaroid.POLAROID
         return this.dslContext
@@ -81,5 +82,35 @@ class BoardJooqRepositoryImpl(
                     .and(jBoard.ACTIVEYN.eq(1))
             ))
             .fetchOne(0, Long::class.java) ?: 0L
+    }
+
+    override fun findById(id: UUID): MyBoardDto.Companion.GetOneRes? {
+        val jBoard = Board.BOARD
+        return this.dslContext.selectFrom(jBoard)
+            .where(jBoard.ID.eq(UuidConverter.uuidToByteArray(id)))
+            .fetchOne()?.map {
+                MyBoardDto.Companion.GetOneRes(
+                    id = UuidConverter.byteArrayToUUID(it.get("id", ByteArray::class.java)!!),
+                    title = it.get("title", String::class.java)!!,
+                    createdAt = it.get("created_at", LocalDateTime::class.java)!!,
+                    userId = it.get("user_id", Long::class.java),
+                )
+            }
+    }
+
+    override fun updateTitle(id: UUID, title: String) {
+        val jBoard = Board.BOARD
+        this.dslContext.update(jBoard)
+            .set(jBoard.TITLE, title)
+            .where(jBoard.ID.eq(UuidConverter.uuidToByteArray(id)))
+            .execute()
+    }
+
+    override fun delete(id: UUID) {
+        val jBoard = Board.BOARD
+        this.dslContext.update(jBoard)
+            .set(jBoard.YN, 0)
+            .where(jBoard.ID.eq(UuidConverter.uuidToByteArray(id)))
+            .execute()
     }
 }
