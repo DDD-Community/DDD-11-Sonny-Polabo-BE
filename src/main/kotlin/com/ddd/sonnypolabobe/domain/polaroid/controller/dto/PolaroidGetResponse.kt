@@ -11,5 +11,5 @@ data class PolaroidGetResponse(
     @Schema(description = "한 줄 문구", example = "한 줄 메시지입니다.")
     val oneLineMessage: String,
     @Schema(description = "작성자 ID", example = "userId")
-    val userId: UUID?,
+    val userId: Long?,
 )

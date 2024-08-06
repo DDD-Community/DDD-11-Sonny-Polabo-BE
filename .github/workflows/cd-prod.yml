@@ -2,7 +2,7 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ "dev" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -72,7 +72,7 @@ jobs:
       - name: Deploy
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.EC2_HOST_DEV }}
+          host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_KEY }}
           script: |
@@ -80,5 +80,5 @@ jobs:
             docker stop polabo-dev
             docker rm polabo-dev
             docker pull ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
-            docker run -d -v /etc/localtime:/etc/localtime:ro -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro -e ENVIRONMENT_VALUE=-Dspring.profiles.active=local --name polabo-dev -p 8080:8080 --restart=always --network host ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
+            docker run -d -v /etc/localtime:/etc/localtime:ro -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro -e ENVIRONMENT_VALUE=-Dspring.profiles.active=dev --name polabo-dev -p 8080:8080 --restart=always --network host ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
         

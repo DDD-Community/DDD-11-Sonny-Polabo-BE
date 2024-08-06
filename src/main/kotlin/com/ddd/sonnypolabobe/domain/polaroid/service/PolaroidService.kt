@@ -24,7 +24,7 @@ class PolaroidService(private val polaroidJooqRepository: PolaroidJooqRepository
                 id = it.id!!,
                 imageUrl = s3Util.getImgUrl(it.imageKey!!),
                 oneLineMessage = it.oneLineMessage ?: "",
-                userId = it.userId?.let { it1 -> UuidConverter.byteArrayToUUID(it1) }
+                userId = it.userId
             )
         }
 
