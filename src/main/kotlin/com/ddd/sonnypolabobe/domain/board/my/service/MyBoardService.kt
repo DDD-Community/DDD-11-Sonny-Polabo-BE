@@ -5,7 +5,6 @@ import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
 import com.ddd.sonnypolabobe.global.entity.PageDto
 import com.ddd.sonnypolabobe.global.util.UuidConverter
 import org.springframework.stereotype.Service
-import sun.jvm.hotspot.debugger.Page
 
 @Service
 class MyBoardService(private val boardJooqRepository: BoardJooqRepository) {
