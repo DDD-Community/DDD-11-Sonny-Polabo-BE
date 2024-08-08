@@ -15,4 +15,6 @@ interface BoardJooqRepository {
     fun findById(id: UUID): MyBoardDto.Companion.GetOneRes?
     fun updateTitle(id: UUID, title: String)
     fun delete(id: UUID)
+    fun findAllByUserId(userId: Long, page: Int, size: Int): List<MyBoardDto.Companion.PageListRes>
+    fun selectTotalCountByUserId(userId: Long): Long
 }

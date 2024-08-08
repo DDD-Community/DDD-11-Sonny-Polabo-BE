@@ -13,11 +13,10 @@ class MyBoardDto {
         )
 
         data class PageListRes(
-            val id: Long,
+            val id: UUID,
             val title: String,
             @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
             val createdAt: LocalDateTime,
-            val totalCount: Long
         )
 
         data class GetOneRes(

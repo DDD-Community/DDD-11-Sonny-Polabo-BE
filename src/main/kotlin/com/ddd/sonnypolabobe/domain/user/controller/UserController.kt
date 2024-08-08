@@ -26,19 +26,19 @@ class UserController(
     """)
     @PutMapping("/nickname")
     fun updateNickname(@RequestBody request: UserDto.Companion.UpdateReq)
-    = run {
+    : ApplicationResponse<Nothing> {
         val userInfoFromToken = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         this.userService.updateProfile(request, userInfoFromToken.id)
-        ApplicationResponse.ok()
+        return ApplicationResponse.ok()
     }
 
     @Operation(summary = "프로필 조회", description = """
         프로필을 조회합니다.
     """)
     @GetMapping("/profile")
-    fun getProfile() = run {
+    fun getProfile() : ApplicationResponse<UserDto.Companion.ProfileRes> {
         val userInfoFromToken = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
-        ApplicationResponse.ok(this.userService.findById(userInfoFromToken.id))
+        return ApplicationResponse.ok(this.userService.findById(userInfoFromToken.id))
     }
 
     @Operation(summary = "회원 탈퇴", description = """
@@ -47,9 +47,9 @@ class UserController(
         사유가 '기타'인 경우에만 reason 필드를 채워주세요.
     """)
     @PutMapping("/withdraw")
-    fun withdraw(@RequestBody request: UserDto.Companion.WithdrawReq) = run {
+    fun withdraw(@RequestBody request: UserDto.Companion.WithdrawReq) : ApplicationResponse<Nothing> {
         val userInfoFromToken = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         this.userService.withdraw(request, userInfoFromToken.id)
-        ApplicationResponse.ok()
+        return ApplicationResponse.ok()
     }
 }

@@ -22,4 +22,7 @@ enum class CustomErrorCode(
     JWT_ILLEGAL_ARGUMENT(HttpStatus.UNAUTHORIZED, "JWT005", "잘못된 인자입니다."),
     JWT_SIGNATURE(HttpStatus.UNAUTHORIZED, "JWT006", "잘못된 서명입니다."),
 
+    // board
+    BOARD_CREATED_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BOARD001", "보드 생성에 실패했습니다."),
+
 }
