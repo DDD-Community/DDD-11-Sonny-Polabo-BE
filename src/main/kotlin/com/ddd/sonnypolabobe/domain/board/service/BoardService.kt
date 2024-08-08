@@ -4,6 +4,8 @@ import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardCreateRequest
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
 import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
+import com.ddd.sonnypolabobe.global.exception.ApplicationException
+import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.S3Util
 import com.ddd.sonnypolabobe.global.util.UuidConverter
 import org.springframework.beans.factory.annotation.Value
@@ -17,9 +19,8 @@ class BoardService(
     @Value("\${limit.count}")
     private val limit: Int
 ) {
-    fun create(request: BoardCreateRequest): UUID? {
-        return this.boardJooqRepository.insertOne(request)?.let { UuidConverter.byteArrayToUUID(it) }
-    }
+    fun create(request: BoardCreateRequest): UUID = this.boardJooqRepository.insertOne(request)?.let { UuidConverter.byteArrayToUUID(it) }
+        ?: throw ApplicationException(CustomErrorCode.BOARD_CREATED_FAILED)
 
     fun getById(id: String): List<BoardGetResponse> {
         return id.run {

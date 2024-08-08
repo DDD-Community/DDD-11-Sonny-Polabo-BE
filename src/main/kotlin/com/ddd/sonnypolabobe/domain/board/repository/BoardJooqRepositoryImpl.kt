@@ -113,4 +113,40 @@ class BoardJooqRepositoryImpl(
             .where(jBoard.ID.eq(UuidConverter.uuidToByteArray(id)))
             .execute()
     }
+
+    override fun findAllByUserId(
+        userId: Long,
+        page: Int,
+        size: Int
+    ): List<MyBoardDto.Companion.PageListRes> {
+        val jBoard = Board.BOARD
+        val data = this.dslContext.select(
+            jBoard.ID,
+            jBoard.TITLE,
+            jBoard.CREATED_AT
+        )
+            .from(jBoard)
+            .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
+            .orderBy(jBoard.CREATED_AT.desc())
+            .limit(size)
+            .offset(page * size)
+            .fetch()
+
+        return data.map {
+            MyBoardDto.Companion.PageListRes(
+                id = UuidConverter.byteArrayToUUID(it.get("id", ByteArray::class.java)!!),
+                title = it.get("title", String::class.java)!!,
+                createdAt = it.get("created_at", LocalDateTime::class.java)!!,
+            )
+        }
+    }
+
+    override fun selectTotalCountByUserId(userId: Long): Long {
+        val jBoard = Board.BOARD
+        return this.dslContext
+            .selectCount()
+            .from(jBoard)
+            .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
+            .fetchOne(0, Long::class.java) ?: 0L
+    }
 }

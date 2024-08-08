@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
+import java.util.UUID
 
 @Tag(name = "Board API", description = "보드 관련 API")
 @RestController
@@ -26,14 +27,14 @@ class BoardController(
         보드를 생성합니다.
         userId는 추후 회원가입 기능이 추가될 것을 대비한 것입니다. 지금은 null로 주세요.
         
-        userId 타입을 UUID -> Long으로 변경하였습니다. - 2024.08.03
+        userId 데이터는 백에서 채울 것입니다.!
     """)
     @PostMapping
     fun create(@RequestBody request : BoardCreateRequest)
-    = run {
+    : ApplicationResponse<UUID> {
         val user = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         request.userId = user.id
-        ApplicationResponse.ok(this.boardService.create(request))
+        return ApplicationResponse.ok(this.boardService.create(request))
     }
 
     @Operation(summary = "보드 조회", description = """

@@ -43,7 +43,7 @@ class SecurityConfig(
                 it.requestMatchers("/api/v1/file/**").permitAll()
                 it.requestMatchers("/api/v1/oauth/sign-in", "/api/v1/oauth/re-issue").permitAll()
                 it.requestMatchers("/health", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                it.requestMatchers("/api/v1/boards/{id}").permitAll()
+                it.requestMatchers("/api/v1/boards/{id}", "/api/v1/polaroids/{id}", "/api/v1/boards/{boardId}/polaroids").permitAll()
                 it.anyRequest().authenticated()
             }
             .exceptionHandling{

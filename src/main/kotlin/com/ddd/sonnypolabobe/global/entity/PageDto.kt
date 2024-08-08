@@ -1,8 +1,9 @@
 package com.ddd.sonnypolabobe.global.entity
 
-data class PageDto(
-    val page: Int,
-    val size: Int,
-    val total: Int,
-    val content: List<Any>
+
+data class PageDto<T>(
+    val data: List<T>,
+    val totalCount: Long,
+    val totalPage: Int,
+    val currentPage: Int
 )
