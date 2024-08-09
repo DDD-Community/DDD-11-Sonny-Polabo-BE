@@ -80,5 +80,5 @@ jobs:
             docker stop polabo-dev
             docker rm polabo-dev
             docker pull ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
-            docker run -d -v /etc/localtime:/etc/localtime:ro -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro -e ENVIRONMENT_VALUE=-Dspring.profiles.active=local --name polabo-dev -p 8080:8080 --restart=always --network host ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
+            docker run -d -v /etc/localtime:/etc/localtime:ro -v /usr/share/zoneinfo/Asia/Seoul:/etc/timezone:ro -e ENVIRONMENT_VALUE=-Dspring.profiles.active=dev --name polabo-dev -p 8080:8080 --restart=always --network host ${{ secrets.ECR_REGISTRY }}/polabo:${{steps.current-time.outputs.formattedTime}}
         
