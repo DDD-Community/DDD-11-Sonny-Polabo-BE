@@ -26,7 +26,7 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
                 DateConverter.convertToKst(LocalDateTime.now()),
                 1,
                 request.birthDt,
-                UserGender.valueOf(request.gender.name)
+                UserGender.valueOf(request.gender?.name ?: UserGender.NONE.name)
             )
             .returningResult(jUser.ID)
             .fetchOne(0, Long::class.java) ?: 0

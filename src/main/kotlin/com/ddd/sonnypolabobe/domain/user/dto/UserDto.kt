@@ -14,8 +14,8 @@ class UserDto {
         data class CreateReq(
             val email: String,
             val nickName: String,
-            val birthDt : LocalDate,
-            val gender : GenderType
+            val birthDt : LocalDate?,
+            val gender : GenderType?
             )
 
         data class UpdateReq(
