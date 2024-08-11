@@ -56,7 +56,7 @@ running:
   name: dev
 
 jwt:
-  access-key: ENC(dMTqjTdS4VJz/1Gduapvl1rDDXUUKkp0bilgqRWMI9X4DaAMVDXY13Fb7QMBDUkI)
+  access-key: ENC(43L/PYzgJ86ciTJurdPNLgq49TUMtOgF6ke+Z7d4/wEN2WMu2iakpdDlD2C8d9GUNZzFl0Y9ftK4tk545L5TSv05I5OgbYkBGf2m5O51cjUZmSRg897e+5o+Z5aLgwb1+9tcOcawZR/X9lgkA5hTxlzGc7DHf1vMepLDnbaQBk0I56ieDV314JEEqIaeID72)
   validity:
     access-seconds: ENC(KeRwqvZAr0MfEVmxw8nBQQFEITQ0v/Fl)
 

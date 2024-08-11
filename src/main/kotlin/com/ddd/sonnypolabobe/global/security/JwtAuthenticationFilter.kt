@@ -19,13 +19,14 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val authorizationHeader = request.getHeader("Authorization")
+//        if(request.requestURI.contains("/api/v1/oauth")) {
+//            filterChain.doFilter(request, response)
+//            return
+//        }
 
         //JWT가 헤더에 있는 경우
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            if(request.requestURI.contains("/api/v1/oauth")) {
-                filterChain.doFilter(request, response)
-                return
-            }
+
             //JWT 유효성 검증
             if (jwtUtil.validateToken(authorizationHeader)) {
                 val userId = jwtUtil.getAuthenticatedMemberFromToken(authorizationHeader).id

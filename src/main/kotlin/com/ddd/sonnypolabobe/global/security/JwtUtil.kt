@@ -9,6 +9,7 @@ import io.jsonwebtoken.security.Keys
 import jakarta.xml.bind.DatatypeConverter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
+import java.nio.charset.StandardCharsets
 import java.security.Key
 import java.util.*
 
@@ -31,7 +32,7 @@ class JwtUtil(
             .setClaims(claims)
             .setIssuedAt(now)
             .setExpiration(expiredDate)
-            .signWith(getKey(accessSecretKey), SignatureAlgorithm.HS512)
+            .signWith(SignatureAlgorithm.HS512, getKeyBytes(accessSecretKey))
             .compact()
         return UserDto.Companion.TokenRes(accessToken, expiredDate, true, request.nickName)
     }
@@ -46,7 +47,7 @@ class JwtUtil(
 
     fun validateToken(accessToken: String): Boolean {
         try {
-            val key = getKey(accessSecretKey)
+            val key = getKeyBytes(accessSecretKey)
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(subPrefix(accessToken))
             return true
         } catch (e: Exception) {
@@ -57,7 +58,7 @@ class JwtUtil(
 
     fun getClaimsFromAccessToken(token: String, secretKey: String): Claims {
         try {
-            val key = getKey(secretKey)
+            val key = getKeyBytes(secretKey)
             return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
         } catch (e: io.jsonwebtoken.security.SecurityException) {
             throw ApplicationException(CustomErrorCode.JWT_SIGNATURE)
