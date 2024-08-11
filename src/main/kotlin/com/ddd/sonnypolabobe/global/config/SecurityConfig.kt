@@ -41,7 +41,7 @@ class SecurityConfig(
                 it.requestMatchers("/api/v1/boards/create-available").permitAll()
                 it.requestMatchers("/api/v1/boards/total-count").permitAll()
                 it.requestMatchers("/api/v1/file/**").permitAll()
-                it.requestMatchers("/api/v1/oauth/sign-in", "/api/v1/oauth/re-issue", "/api/v1/user/check-exist").permitAll()
+                it.requestMatchers("/api/v1/oauth/**", "/api/v1/user/check-exist").permitAll()
                 it.requestMatchers("/health", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                 it.requestMatchers("/api/v1/boards/{id}", "/api/v1/polaroids/{id}", "/api/v1/boards/{boardId}/polaroids").permitAll()
                 it.anyRequest().authenticated()
