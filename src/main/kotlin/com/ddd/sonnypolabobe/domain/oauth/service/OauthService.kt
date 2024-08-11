@@ -5,17 +5,9 @@ import com.ddd.sonnypolabobe.domain.user.repository.UserJooqRepository
 import com.ddd.sonnypolabobe.domain.user.token.dto.UserTokenDto
 import com.ddd.sonnypolabobe.domain.user.token.repository.UserTokenJooqRepository
 import com.ddd.sonnypolabobe.global.security.JwtUtil
-import com.ddd.sonnypolabobe.global.security.KakaoDto
 import com.ddd.sonnypolabobe.global.util.DateConverter.dateToLocalDateTime
-import com.ddd.sonnypolabobe.global.util.WebClientUtil
-import com.ddd.sonnypolabobe.logger
-import com.fasterxml.jackson.databind.ObjectMapper
-import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import org.springframework.util.LinkedMultiValueMap
-import org.springframework.util.MultiValueMap
-import org.springframework.web.reactive.function.BodyInserters
 
 
 @Service
@@ -39,11 +31,12 @@ class OauthService(
             val userToken = UserTokenDto(
                 userId = it.id,
                 accessToken = tokenRes.accessToken,
-                expiredAt = dateToLocalDateTime(tokenRes.expiredDate)
+                expiredAt = dateToLocalDateTime(tokenRes.expiredDate),
+                refreshToken = tokenRes.refreshToken
             )
 
             this.userTokenRepository.updateByUserId(userToken)
-            return tokenRes
+            return tokenRes.also { it.isNewUser = false }
         } ?: run {
             val userId = this.userRepository.insertOne(request)
 
@@ -59,20 +52,21 @@ class OauthService(
             val userToken = UserTokenDto(
                 userId = userId,
                 accessToken = tokenRes.accessToken,
-                expiredAt = dateToLocalDateTime(tokenRes.expiredDate)
+                expiredAt = dateToLocalDateTime(tokenRes.expiredDate),
+                refreshToken = tokenRes.refreshToken
             )
 
             this.userTokenRepository.insertOne(userToken)
-            return tokenRes
+            return tokenRes.also { it.isNewUser = true }
         }
     }
 
     fun reIssue(token: String?): UserDto.Companion.TokenRes{
     val tokenFromDB = token?.let {
         val slicedToken = if(it.startsWith("Bearer ")) it.substring(7) else it
-        this.userTokenRepository.findByAccessToken(slicedToken)
+        this.jwtUtil.getAuthenticatedMemberFromRefreshToken(slicedToken)
     } ?: throw RuntimeException("Token Not Found")
-        val user = this.userRepository.findById(tokenFromDB.userId) ?: throw RuntimeException("User Not Found")
+        val user = this.userRepository.findById(tokenFromDB.id.toLong()) ?: throw RuntimeException("User Not Found")
 
         // 토큰 생성
         val tokenRequest = UserDto.Companion.CreateTokenReq(
@@ -86,7 +80,8 @@ class OauthService(
         val userToken = UserTokenDto(
             userId = user.id,
             accessToken = tokenRes.accessToken,
-            expiredAt = dateToLocalDateTime(tokenRes.expiredDate)
+            expiredAt = dateToLocalDateTime(tokenRes.expiredDate),
+            refreshToken = tokenRes.refreshToken
         )
 
         this.userTokenRepository.updateByUserId(userToken)

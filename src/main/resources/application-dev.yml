@@ -57,8 +57,10 @@ running:
 
 jwt:
   access-key: ENC(43L/PYzgJ86ciTJurdPNLgq49TUMtOgF6ke+Z7d4/wEN2WMu2iakpdDlD2C8d9GUNZzFl0Y9ftK4tk545L5TSv05I5OgbYkBGf2m5O51cjUZmSRg897e+5o+Z5aLgwb1+9tcOcawZR/X9lgkA5hTxlzGc7DHf1vMepLDnbaQBk0I56ieDV314JEEqIaeID72)
+  refresh-key: ENC(Tg3e1h7BGfmOmB1kbSHW/Wdi9QQh34DR6XsD6Su7GkMH236k11Ffl9siE2FsDVvJX3MRmF7szRveRfUZR4DbgiYXzSoC35yGQHAiljtt7Cb77QuofiCLpKMetX6B3egTHFpoJWHqrsn1IRYi31rcYLIWnGff0vAMCy3IX2jnI2PzjVgzW0/UjpqMXspUj3rIuDjK926M/fCijH+xgswjVNqJcnQQmIk+5FUTSyut5tY=)
   validity:
     access-seconds: ENC(KeRwqvZAr0MfEVmxw8nBQQFEITQ0v/Fl)
+    refresh-seconds: ENC(bk/TKkZx9JLOphcFQLgwIA==)
 
 logging:
   discord:
