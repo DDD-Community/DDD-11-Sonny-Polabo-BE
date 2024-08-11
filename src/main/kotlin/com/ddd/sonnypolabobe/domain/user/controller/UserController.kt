@@ -7,12 +7,7 @@ import com.ddd.sonnypolabobe.global.util.DateConverter
 import io.swagger.v3.oas.annotations.Operation
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PutMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 
 @RestController
@@ -52,4 +47,12 @@ class UserController(
         this.userService.withdraw(request, userInfoFromToken.id)
         return ApplicationResponse.ok()
     }
+
+    @Operation(summary = "회원 계정 존재 여부 확인", description = """
+        이메일로 계정 등록 여부를 확인합니다.
+    """)
+    @GetMapping("/check-exist")
+    fun checkExist(
+        @RequestParam("email") email: String
+    ) = ApplicationResponse.ok(this.userService.checkExist(email))
 }

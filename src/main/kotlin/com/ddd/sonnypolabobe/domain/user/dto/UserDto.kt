@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UserDetails
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.Date
 import java.util.stream.Collectors
@@ -12,8 +13,10 @@ class UserDto {
     companion object {
         data class CreateReq(
             val email: String,
-            val nickName: String
-        )
+            val nickName: String,
+            val birthDt : LocalDate,
+            val gender : GenderType
+            )
 
         data class UpdateReq(
             @JsonProperty("nickName")
@@ -28,7 +31,9 @@ class UserDto {
 
         data class TokenRes(
             val accessToken: String,
-            val expiredDate: Date
+            val expiredDate: Date,
+            val isNewUser : Boolean,
+            val nickName: String
         )
 
         data class ProfileRes(
