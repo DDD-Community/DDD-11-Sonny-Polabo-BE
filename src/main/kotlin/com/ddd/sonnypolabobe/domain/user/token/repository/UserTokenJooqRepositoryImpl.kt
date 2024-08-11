@@ -17,35 +17,39 @@ class UserTokenJooqRepositoryImpl(private val dslContext: DSLContext) : UserToke
             this.accessExpiredAt = userToken.expiredAt
             this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
             this.updatedAt = DateConverter.convertToKst(LocalDateTime.now())
+            this.refreshToken = userToken.refreshToken
         }
         this.dslContext.insertInto(jUserToken,
             jUserToken.USER_ID,
             jUserToken.ACCESS_TOKEN,
             jUserToken.ACCESS_EXPIRED_AT,
             jUserToken.CREATED_AT,
-            jUserToken.UPDATED_AT
+            jUserToken.UPDATED_AT,
+            jUserToken.REFRESH_TOKEN
         )
             .values(
                 insertValue.userId,
                 insertValue.accessToken,
                 insertValue.accessExpiredAt,
                 insertValue.createdAt,
-                insertValue.updatedAt
+                insertValue.updatedAt,
+                insertValue.refreshToken
             )
             .onDuplicateKeyUpdate()
             .set(jUserToken.USER_ID, insertValue.userId)
             .execute()
     }
 
-    override fun findByAccessToken(token: String): UserTokenDto? {
+    override fun findByRefreshToken(token: String): UserTokenDto? {
         val jUserToken = UserToken.USER_TOKEN
         return this.dslContext.selectFrom(jUserToken)
-            .where(jUserToken.ACCESS_TOKEN.eq(token))
+            .where(jUserToken.REFRESH_TOKEN.eq(token))
             .fetchOne()?.map {
                 UserTokenDto(
                     userId = it.get(jUserToken.USER_ID)!!,
                     accessToken = it.get(jUserToken.ACCESS_TOKEN)!!,
-                    expiredAt = it.get(jUserToken.ACCESS_EXPIRED_AT)!!
+                    expiredAt = it.get(jUserToken.ACCESS_EXPIRED_AT)!!,
+                    refreshToken = it.get(jUserToken.REFRESH_TOKEN)!!
                 )
             }
     }

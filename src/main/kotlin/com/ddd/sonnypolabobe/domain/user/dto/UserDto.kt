@@ -31,8 +31,9 @@ class UserDto {
 
         data class TokenRes(
             val accessToken: String,
+            val refreshToken: String,
             val expiredDate: Date,
-            val isNewUser : Boolean,
+            var isNewUser : Boolean,
             val nickName: String
         )
 

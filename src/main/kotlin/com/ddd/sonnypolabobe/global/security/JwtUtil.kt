@@ -19,6 +19,10 @@ class JwtUtil(
     private val accessSecretKey: String,
     @Value("\${jwt.validity.access-seconds}")
     private val accessTokenExpirationMs: Long,
+    @Value("\${jwt.refresh-key}")
+    private val refreshSecretKey: String,
+    @Value("\${jwt.validity.refresh-seconds}")
+    private val refreshTokenExpirationMs: Long
 ) {
 
     fun generateAccessToken(request: UserDto.Companion.CreateTokenReq): UserDto.Companion.TokenRes {
@@ -34,7 +38,23 @@ class JwtUtil(
             .setExpiration(expiredDate)
             .signWith(SignatureAlgorithm.HS512, getKeyBytes(accessSecretKey))
             .compact()
-        return UserDto.Companion.TokenRes(accessToken, expiredDate, true, request.nickName)
+        return UserDto.Companion.TokenRes(accessToken, generateRefreshToken(request), expiredDate, false, request.nickName)
+    }
+
+    fun generateRefreshToken(request: UserDto.Companion.CreateTokenReq): String {
+        val now = Date()
+        val expiredDate = Date(now.time + refreshTokenExpirationMs)
+        val claims: MutableMap<String, Any> = HashMap()
+        claims["CLAIM_KEY_ID"] = request.id.toString()
+        claims["CLAIM_EMAIL"] = request.email
+        claims["CLAIM_NICKNAME"] = request.nickName
+        val refreshToken = Jwts.builder()
+            .setClaims(claims)
+            .setIssuedAt(now)
+            .setExpiration(expiredDate)
+            .signWith(SignatureAlgorithm.HS512, getKeyBytes(refreshSecretKey))
+            .compact()
+        return refreshToken
     }
 
     fun getAuthenticatedMemberFromToken(accessToken: String): AuthenticatedMember {
@@ -43,6 +63,25 @@ class JwtUtil(
         val email = claims["CLAIM_EMAIL"].toString()
         val nickname = claims["CLAIM_NICKNAME"].toString()
         return AuthenticatedMember(id, email, nickname, claims.expiration)
+    }
+
+    fun getAuthenticatedMemberFromRefreshToken(refreshToken: String): AuthenticatedMember {
+        val claims = getClaimsFromAccessToken(subPrefix(refreshToken), refreshSecretKey)
+        val id = claims["CLAIM_KEY_ID"].toString()
+        val email = claims["CLAIM_EMAIL"].toString()
+        val nickname = claims["CLAIM_NICKNAME"].toString()
+        return AuthenticatedMember(id, email, nickname, claims.expiration)
+    }
+
+    fun validateRefreshToken(refreshToken: String): Boolean {
+        try {
+            val key = getKeyBytes(refreshSecretKey)
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(subPrefix(refreshToken))
+            return true
+        } catch (e: Exception) {
+            logger().error("error : $e")
+            throw ApplicationException(CustomErrorCode.JWT_INVALID)
+        }
     }
 
     fun validateToken(accessToken: String): Boolean {
