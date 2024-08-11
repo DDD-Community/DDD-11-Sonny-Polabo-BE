@@ -2,6 +2,7 @@ package com.ddd.sonnypolabobe.domain.user.repository
 
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.util.DateConverter
+import com.ddd.sonnypolabobe.jooq.polabo.enums.UserGender
 import com.ddd.sonnypolabobe.jooq.polabo.tables.User
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
@@ -11,23 +12,21 @@ import java.time.LocalDateTime
 class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepository{
     override fun insertOne(request: UserDto.Companion.CreateReq): Long {
         val jUser = User.USER
-        val insertValue = jUser.newRecord().apply {
-            this.email = request.email
-            this.nickName = request.nickName
-            this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
-            this.yn = 1
-        }
         return this.dslContext.insertInto(jUser,
             jUser.EMAIL,
             jUser.NICK_NAME,
             jUser.CREATED_AT,
-            jUser.YN
+            jUser.YN,
+            jUser.BIRTH_DT,
+            jUser.GENDER
             )
             .values(
-                insertValue.email,
-                insertValue.nickName,
-                insertValue.createdAt,
-                insertValue.yn
+                request.email,
+                request.nickName,
+                DateConverter.convertToKst(LocalDateTime.now()),
+                1,
+                request.birthDt,
+                UserGender.valueOf(request.gender.name)
             )
             .returningResult(jUser.ID)
             .fetchOne(0, Long::class.java) ?: 0

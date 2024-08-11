@@ -33,7 +33,7 @@ class JwtUtil(
             .setExpiration(expiredDate)
             .signWith(getKey(accessSecretKey), SignatureAlgorithm.HS512)
             .compact()
-        return UserDto.Companion.TokenRes(accessToken, expiredDate)
+        return UserDto.Companion.TokenRes(accessToken, expiredDate, true, request.nickName)
     }
 
     fun getAuthenticatedMemberFromToken(accessToken: String): AuthenticatedMember {

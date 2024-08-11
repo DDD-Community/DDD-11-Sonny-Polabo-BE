@@ -15,6 +15,8 @@ class OauthController(private val oauthService: OauthService) {
     @Operation(summary = "회원가입/로그인", description = """
         회원가입/로그인을 진행합니다.
         이미 가입된 회원이라면 로그인을 진행하고, 가입되지 않은 회원이라면 회원가입을 진행합니다.
+        
+        요청 바디의 값이 변경되었습니다. - 2024.08.11
     """)
     @PostMapping("/sign-in")
     fun signIn(@RequestBody request: UserDto.Companion.CreateReq)

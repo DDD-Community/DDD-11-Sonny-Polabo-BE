@@ -29,5 +29,9 @@ class UserService(
         this.withdrawJooqRepository.insertOne(request, id)
     }
 
+    fun checkExist(email: String): Boolean {
+        return this.userJooqRepository.findByEmail(email) != null
+    }
+
 
 }
