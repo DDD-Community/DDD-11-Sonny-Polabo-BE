@@ -60,6 +60,7 @@ class UserTokenJooqRepositoryImpl(private val dslContext: DSLContext) : UserToke
             .set(jUserToken.ACCESS_TOKEN, userToken.accessToken)
             .set(jUserToken.ACCESS_EXPIRED_AT, userToken.expiredAt)
             .set(jUserToken.UPDATED_AT, DateConverter.convertToKst(LocalDateTime.now()))
+            .set(jUserToken.REFRESH_TOKEN, userToken.refreshToken)
             .where(jUserToken.USER_ID.eq(userToken.userId))
             .execute()
     }
