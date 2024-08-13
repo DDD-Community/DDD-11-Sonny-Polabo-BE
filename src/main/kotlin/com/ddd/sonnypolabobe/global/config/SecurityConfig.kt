@@ -48,7 +48,7 @@ class SecurityConfig(
             }
             .exceptionHandling{
                 it.authenticationEntryPoint { _, response, _ ->
-                    response.sendError(401)
+                    response.sendError(500)
                 }
             }
             .build()
