@@ -20,7 +20,10 @@ class UserDto {
 
         data class UpdateReq(
             @JsonProperty("nickName")
-            val nickName : String
+            val nickName : String,
+            @JsonProperty("birthDt")
+            val birthDt : LocalDate?,
+            val gender : GenderType?
         )
 
         data class CreateTokenReq(

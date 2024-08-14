@@ -64,4 +64,11 @@ class UserTokenJooqRepositoryImpl(private val dslContext: DSLContext) : UserToke
             .where(jUserToken.USER_ID.eq(userToken.userId))
             .execute()
     }
+
+    override fun deleteByUserId(userId: Long) {
+        val jUserToken = UserToken.USER_TOKEN
+        this.dslContext.deleteFrom(jUserToken)
+            .where(jUserToken.USER_ID.eq(userId))
+            .execute()
+    }
 }

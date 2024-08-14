@@ -19,7 +19,7 @@ class JwtAuthenticationFilter(
         filterChain: FilterChain
     ) {
         val authorizationHeader = request.getHeader("Authorization")
-        if(request.requestURI.contains("/api/v1/oauth")) {
+        if(request.requestURI.contains("/api/v1/oauth/re-issue")) {
             filterChain.doFilter(request, response)
             return
         }

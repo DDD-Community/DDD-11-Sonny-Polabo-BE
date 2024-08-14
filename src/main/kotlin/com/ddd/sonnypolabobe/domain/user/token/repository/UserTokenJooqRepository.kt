@@ -6,4 +6,5 @@ interface UserTokenJooqRepository {
     fun insertOne(userToken: UserTokenDto)
     fun findByRefreshToken(token: String): UserTokenDto?
     fun updateByUserId(userToken: UserTokenDto)
+    fun deleteByUserId(userId: Long)
 }
