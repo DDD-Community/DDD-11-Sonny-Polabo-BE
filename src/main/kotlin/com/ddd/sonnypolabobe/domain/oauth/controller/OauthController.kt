@@ -4,7 +4,6 @@ import com.ddd.sonnypolabobe.domain.oauth.service.OauthService
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.http.HttpHeaders
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
@@ -26,4 +25,15 @@ class OauthController(private val oauthService: OauthService) {
     fun reIssue(
         @RequestHeader(name = "Authorization", required = true) header: String
     ) = ApplicationResponse.ok(this.oauthService.reIssue(header))
+
+    @Operation(summary = "로그아웃", description = """
+        로그아웃을 진행합니다.
+        액세스 토큰을 헤더에 담아주세요.
+    """)
+    @PostMapping("/sign-out")
+    fun signOut() : ApplicationResponse<Nothing> {
+        val userId = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+        this.oauthService.signOut(userId.id)
+        return ApplicationResponse.ok()
+    }
 }

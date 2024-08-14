@@ -12,7 +12,7 @@ import java.time.LocalDateTime
 class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepository{
     override fun insertOne(request: UserDto.Companion.CreateReq): Long {
         val jUser = User.USER
-        return this.dslContext.insertInto(jUser,
+        val result = this.dslContext.insertInto(jUser,
             jUser.EMAIL,
             jUser.NICK_NAME,
             jUser.CREATED_AT,
@@ -27,9 +27,13 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
                 1,
                 request.birthDt,
                 UserGender.valueOf(request.gender?.name ?: UserGender.NONE.name)
-            )
-            .returningResult(jUser.ID)
-            .fetchOne(0, Long::class.java) ?: 0
+            ).execute()
+        if(result == 0) throw Exception("Failed to insert user")
+
+        return this.dslContext.select(jUser.ID)
+            .from(jUser)
+            .where(jUser.EMAIL.eq(request.email).and(jUser.YN.eq(1)))
+            .fetchOneInto(Long::class.java) ?: throw Exception("Failed to get user id")
     }
 
     override fun findById(id: Long): UserDto.Companion.Res? {
@@ -53,7 +57,7 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
     override fun findByEmail(email: String): UserDto.Companion.Res? {
         val jUser = User.USER
         val record = this.dslContext.selectFrom(jUser)
-            .where(jUser.EMAIL.eq(email))
+            .where(jUser.EMAIL.eq(email).and(jUser.YN.eq(1)))
             .fetchOne()
 
         return record?.let {
@@ -72,8 +76,18 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
         val jUser = User.USER
         this.dslContext.update(jUser)
             .set(jUser.NICK_NAME, request.nickName)
+            .set(jUser.BIRTH_DT, request.birthDt)
+            .set(jUser.GENDER, UserGender.valueOf(request.gender?.name ?: UserGender.NONE.name))
             .set(jUser.UPDATED_AT, DateConverter.convertToKst(LocalDateTime.now()))
             .where(jUser.ID.eq(userId))
+            .execute()
+    }
+
+    override fun deleteById(id: Long) {
+        val jUser = User.USER
+        this.dslContext.update(jUser)
+            .set(jUser.YN, 0)
+            .where(jUser.ID.eq(id))
             .execute()
     }
 }

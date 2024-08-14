@@ -27,6 +27,7 @@ class UserService(
 
     fun withdraw(request: UserDto.Companion.WithdrawReq, id: Long) {
         this.withdrawJooqRepository.insertOne(request, id)
+        this.userJooqRepository.deleteById(id)
     }
 
     fun checkExist(email: String): Boolean {

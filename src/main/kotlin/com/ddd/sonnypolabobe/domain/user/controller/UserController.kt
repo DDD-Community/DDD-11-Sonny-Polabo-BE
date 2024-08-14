@@ -16,8 +16,11 @@ class UserController(
     private val userService: UserService
 ) {
 
-    @Operation(summary = "닉네임 변경", description = """
-        닉네임을 변경합니다.
+    @Operation(summary = "프로필 변경", description = """
+        프로필 사항을 변경합니다.
+        
+        유저가 가진 정보 중 변경한 값 + 변경하지 않은 값 모두 보내주세요.
+        보내는 값을 그대로 디비에 저장합니다.
     """)
     @PutMapping("/nickname")
     fun updateNickname(@RequestBody request: UserDto.Companion.UpdateReq)

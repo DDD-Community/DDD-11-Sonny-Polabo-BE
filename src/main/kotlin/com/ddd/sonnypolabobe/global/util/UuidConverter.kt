@@ -1,5 +1,7 @@
 package com.ddd.sonnypolabobe.global.util
 
+import com.ddd.sonnypolabobe.global.exception.ApplicationException
+import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import java.nio.ByteBuffer
 import java.util.*
 
@@ -19,7 +21,13 @@ object UuidConverter {
     }
 
     fun stringToUUID(uuid: String): UUID {
-        return UUID.fromString(uuid)
+        return try {
+            UUID.fromString(uuid)
+        } catch (e: IllegalArgumentException) {
+            throw ApplicationException(
+                CustomErrorCode.BOARD_NOT_FOUND
+            )
+        }
     }
 
     fun uuidToString(uuid: UUID): String {

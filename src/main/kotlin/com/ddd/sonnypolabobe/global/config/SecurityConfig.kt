@@ -1,6 +1,7 @@
 package com.ddd.sonnypolabobe.global.config
 
 import com.ddd.sonnypolabobe.global.security.JwtAuthenticationFilter
+import com.ddd.sonnypolabobe.global.security.JwtExceptionFilter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -20,8 +21,24 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 @EnableMethodSecurity
 class SecurityConfig(
     private val jwtAuthenticationFilter: JwtAuthenticationFilter,
+    private val jwtExceptionFilter: JwtExceptionFilter
 ) {
-
+    companion object {
+        val ALLOW_URLS = listOf<String>(
+            "/api/v1/boards/{id}",
+            "/api/v1/boards/create-available",
+            "/api/v1/boards/total-count",
+            "/api/v1/file/**",
+            "/api/v1/oauth/sign-in",
+            "/api/v1/oauth/re-issue",
+            "/api/v1/user/check-exist",
+            "/health",
+            "/swagger-ui/**",
+            "/v3/api-docs/**",
+            "/api/v1/polaroids/{id}",
+            "/api/v1/boards/{boardId}/polaroids"
+        )
+    }
     @Bean
     fun filterChain(http: HttpSecurity): SecurityFilterChain {
         return http
@@ -37,19 +54,12 @@ class SecurityConfig(
                 sessionManagementConfig.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter::class.java)
+            .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter::class.java)
             .authorizeHttpRequests {
-                it.requestMatchers("/api/v1/boards/create-available").permitAll()
-                it.requestMatchers("/api/v1/boards/total-count").permitAll()
-                it.requestMatchers("/api/v1/file/**").permitAll()
-                it.requestMatchers("/api/v1/oauth/**", "/api/v1/user/check-exist").permitAll()
-                it.requestMatchers("/health", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
-                it.requestMatchers("/api/v1/boards/{id}", "/api/v1/polaroids/{id}", "/api/v1/boards/{boardId}/polaroids").permitAll()
+                it.requestMatchers(RequestMatcher { request ->
+                    ALLOW_URLS.any { url -> AntPathRequestMatcher(url).matches(request) }
+                }).permitAll()
                 it.anyRequest().authenticated()
-            }
-            .exceptionHandling{
-                it.authenticationEntryPoint { _, response, _ ->
-                    response.sendError(500)
-                }
             }
             .build()
     }
