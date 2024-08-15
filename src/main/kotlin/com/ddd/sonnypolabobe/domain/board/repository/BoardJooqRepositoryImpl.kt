@@ -27,6 +27,7 @@ class BoardJooqRepositoryImpl(
             this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
             this.yn = 1
             this.activeyn = 1
+            this.userId = request.userId
         }
         val result = this.dslContext.insertInto(jBoard)
             .set(insertValue)
