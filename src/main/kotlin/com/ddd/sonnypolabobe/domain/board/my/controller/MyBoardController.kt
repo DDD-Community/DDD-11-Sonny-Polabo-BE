@@ -22,7 +22,7 @@ class MyBoardController(private val myBoardService : MyBoardService) {
         @RequestParam size : Int
     ) : ApplicationResponse<PageDto<MyBoardDto.Companion.PageListRes>> {
         val user = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
-        return ApplicationResponse.ok(this.myBoardService.getMyBoards(user.id, page-1, size))
+        return ApplicationResponse.ok(this.myBoardService.getMyBoards(user.id, page, size))
     }
 
 

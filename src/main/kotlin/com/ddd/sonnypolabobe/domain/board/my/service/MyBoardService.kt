@@ -27,7 +27,7 @@ class MyBoardService(private val boardJooqRepository: BoardJooqRepository) {
     }
 
     fun getMyBoards(userId: Long, page: Int, size: Int): PageDto<MyBoardDto.Companion.PageListRes> {
-        val data = this.boardJooqRepository.findAllByUserId(userId, page, size)
+        val data = this.boardJooqRepository.findAllByUserId(userId, page-1, size)
         val totalCount = this.boardJooqRepository.selectTotalCountByUserId(userId)
         val totalPage = totalCount.toInt() / size + 1
 
