@@ -5,5 +5,6 @@ data class PageDto<T>(
     val data: List<T>,
     val totalCount: Long,
     val totalPage: Int,
-    val currentPage: Int
+    val currentPage: Int,
+    val size : Int
 )

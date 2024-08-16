@@ -18,11 +18,11 @@ class MyBoardController(private val myBoardService : MyBoardService) {
     """)
     @GetMapping
     fun getMyBoards(
-        @RequestParam(name = "page", defaultValue = "0") page : Int,
+        @RequestParam(name = "page", defaultValue = "1") page : Int,
         @RequestParam size : Int
     ) : ApplicationResponse<PageDto<MyBoardDto.Companion.PageListRes>> {
         val user = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
-        return ApplicationResponse.ok(this.myBoardService.getMyBoards(user.id, page, size))
+        return ApplicationResponse.ok(this.myBoardService.getMyBoards(user.id, page-1, size))
     }
 
 
