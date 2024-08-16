@@ -31,6 +31,6 @@ class MyBoardService(private val boardJooqRepository: BoardJooqRepository) {
         val totalCount = this.boardJooqRepository.selectTotalCountByUserId(userId)
         val totalPage = totalCount.toInt() / size + 1
 
-        return PageDto(data, totalCount, totalPage, size)
+        return PageDto(data, totalCount, totalPage, page, size)
     }
 }
