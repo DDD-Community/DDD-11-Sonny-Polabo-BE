@@ -62,7 +62,7 @@ class DiscordApiClient(
             .bodyValue(payload)
             .retrieve()
             .bodyToMono(Void::class.java)
-            .block()
+            .subscribe()
     }
 
     fun sendErrorTrace(errorCode: String, message: String?, trace: String) {
@@ -82,7 +82,7 @@ class DiscordApiClient(
         field3["name"] = "메시지"
         field3["value"] = message ?: "메시지 없음"
 
-        embedData["fields"] = listOf<Map<String, String>>(field1)
+        embedData["fields"] = listOf<Map<String, String>>(field1, field2, field3)
 
         val payload: MutableMap<String, Any> = HashMap()
         payload["embeds"] = arrayOf<Any>(embedData)
@@ -93,7 +93,7 @@ class DiscordApiClient(
             .bodyValue(payload)
             .retrieve()
             .bodyToMono(Void::class.java)
-            .block()
+            .subscribe()
     }
 
 }

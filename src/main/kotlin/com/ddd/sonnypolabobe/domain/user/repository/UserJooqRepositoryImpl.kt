@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.domain.user.repository
 
+import com.ddd.sonnypolabobe.domain.user.dto.GenderType
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.jooq.polabo.enums.UserGender
@@ -17,16 +18,12 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
             jUser.NICK_NAME,
             jUser.CREATED_AT,
             jUser.YN,
-            jUser.BIRTH_DT,
-            jUser.GENDER
             )
             .values(
                 request.email,
                 request.nickName,
                 DateConverter.convertToKst(LocalDateTime.now()),
                 1,
-                request.birthDt,
-                UserGender.valueOf(request.gender?.name ?: UserGender.NONE.name)
             ).execute()
         if(result == 0) throw Exception("Failed to insert user")
 
@@ -49,7 +46,9 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
                 nickName = it.nickName!!,
                 yn = it.yn?.toInt() == 1,
                 createdAt = it.createdAt!!,
-                updatedAt = it.updatedAt
+                updatedAt = it.updatedAt,
+                birthDt = it.birthDt,
+                gender = GenderType.valueOf(it.gender?.name ?: GenderType.NONE.name)
             )
         }
     }
@@ -67,7 +66,9 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
                 nickName = it.nickName!!,
                 yn = it.yn?.toInt() == 1,
                 createdAt = it.createdAt!!,
-                updatedAt = it.updatedAt
+                updatedAt = it.updatedAt,
+                birthDt = it.birthDt,
+                gender = GenderType.valueOf(it.gender?.name ?: GenderType.NONE.name)
             )
         }
     }
