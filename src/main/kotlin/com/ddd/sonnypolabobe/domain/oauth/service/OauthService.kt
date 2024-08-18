@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.domain.oauth.service
 
+import com.ddd.sonnypolabobe.domain.user.dto.GenderType
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.domain.user.repository.UserJooqRepository
 import com.ddd.sonnypolabobe.domain.user.token.dto.UserTokenDto
@@ -37,7 +38,11 @@ class OauthService(
             )
 
             this.userTokenRepository.updateByUserId(userToken)
-            return tokenRes.also { it.isNewUser = false }
+            return tokenRes.also { _ ->
+                tokenRes.isNewUser = false
+                tokenRes.birthDt = it.birthDt
+                tokenRes.gender = it.gender
+            }
         } ?: run {
             val userId = this.userRepository.insertOne(request)
 
@@ -58,7 +63,11 @@ class OauthService(
             )
 
             this.userTokenRepository.insertOne(userToken)
-            return tokenRes.also { it.isNewUser = true }
+            return tokenRes.also { _ ->
+                tokenRes.isNewUser = true
+                tokenRes.birthDt = null
+                tokenRes.gender = GenderType.NONE
+            }
         }
     }
 

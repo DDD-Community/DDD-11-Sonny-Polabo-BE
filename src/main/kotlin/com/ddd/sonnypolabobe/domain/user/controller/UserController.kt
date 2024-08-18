@@ -23,7 +23,7 @@ class UserController(
         보내는 값을 그대로 디비에 저장합니다.
     """)
     @PutMapping("/profile")
-    fun updateNickname(@RequestBody request: UserDto.Companion.UpdateReq)
+    fun updateProfile(@RequestBody request: UserDto.Companion.UpdateReq)
     : ApplicationResponse<Nothing> {
         val userInfoFromToken = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         this.userService.updateProfile(request, userInfoFromToken.id)

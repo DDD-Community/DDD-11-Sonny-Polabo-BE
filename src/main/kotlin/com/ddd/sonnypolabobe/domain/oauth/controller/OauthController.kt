@@ -4,6 +4,7 @@ import com.ddd.sonnypolabobe.domain.oauth.service.OauthService
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import io.swagger.v3.oas.annotations.Operation
+import jakarta.validation.Valid
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
@@ -16,9 +17,12 @@ class OauthController(private val oauthService: OauthService) {
         이미 가입된 회원이라면 로그인을 진행하고, 가입되지 않은 회원이라면 회원가입을 진행합니다.
         
         요청 바디의 값이 변경되었습니다. - 2024.08.11
+        
+        - birthDt, gender 필드는 프로필 수정에서 업데이트 가능합니다.
+            응답 DTO에 기본값 바인딩으로 채웠습니다.
     """)
     @PostMapping("/sign-in")
-    fun signIn(@RequestBody request: UserDto.Companion.CreateReq)
+    fun signIn(@RequestBody @Valid request: UserDto.Companion.CreateReq)
     = ApplicationResponse.ok(this.oauthService.signIn(request))
 
     @PutMapping("/re-issue")
