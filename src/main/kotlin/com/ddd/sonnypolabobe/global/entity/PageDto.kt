@@ -17,6 +17,7 @@ data class PageDto<T>(
     ) : this(data, totalCount, 0, page, size
     )
     init {
-        totalPage = totalCount.toInt() / size
+        totalPage = if(totalCount % size == 0L) (totalCount / size).toInt()
+        else (totalCount / size + 1).toInt()
     }
 }
