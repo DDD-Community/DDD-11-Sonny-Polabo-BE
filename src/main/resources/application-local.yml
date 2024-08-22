@@ -63,3 +63,5 @@ jwt:
 logging:
   discord:
     webhook-uri: ENC(yfeX3WHXQdxkVtasNl5WLv6M/YlN+dVFUurjxGIddstjjipt+KryWKvLu1wDmdGjpuEhUHyaABg4gFWRMk9gNlxSQEE/G1twbuvkOvT0pyFWycVVJ6ryU/v9pDBOS1PSKJY7L3NP66gOGnam6nOvf0Y+F45zZvXj8/sdtR6N798U6fGjFDxOLQ==)
+  level:
+    root: INFO

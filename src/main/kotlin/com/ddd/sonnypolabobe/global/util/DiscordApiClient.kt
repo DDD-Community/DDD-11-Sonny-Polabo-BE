@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.global.util
 
+import com.sun.jndi.ldap.LdapPoolManager.trace
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.http.client.reactive.ReactorClientHttpConnector
@@ -22,36 +23,16 @@ class DiscordApiClient(
         )
         .build()
 
-    fun sendErrorLog(req: HttpLog) {
+    fun sendErrorLog(req: String) {
         val embedData: MutableMap<String, Any> = HashMap()
 
         embedData["title"] = "서버 에러 발생"
 
         val field1: MutableMap<String, String> = HashMap()
-        field1["name"] = "요청 정보"
-        field1["value"] = req.requestMethod + " " + req.requestURI + " " + req.elapsedTime + "ms"
+        field1["name"] = "요청"
+        field1["value"] = req
 
-        val field2: MutableMap<String, String> = HashMap()
-        field2["name"] = "응답 코드"
-        field2["value"] = req.responseStatus.toString()
-
-        val field3: MutableMap<String, String> = HashMap()
-        field3["name"] = "요청 헤더"
-        field3["value"] = req.headers.map { it.key + " : " + it.value }.joinToString("\n")
-
-        val field4: MutableMap<String, String> = HashMap()
-        field4["name"] = "요청 본문"
-        field4["value"] = req.requestBody
-
-        val field5: MutableMap<String, String> = HashMap()
-        field5["name"] = "요청 파람"
-        field5["value"] = req.parameters.map { it.key + " : " + it.value }.joinToString("\n")
-
-        val field6: MutableMap<String, String> = HashMap()
-        field6["name"] = "응답 본문"
-        field6["value"] = req.responseBody
-
-        embedData["fields"] = listOf<Map<String, String>>(field1, field2, field3, field4, field5, field6)
+        embedData["fields"] = listOf<Map<String, String>>(field1)
 
         val payload: MutableMap<String, Any> = HashMap()
         payload["embeds"] = arrayOf<Any>(embedData)

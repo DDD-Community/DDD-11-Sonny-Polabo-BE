@@ -2,7 +2,6 @@ package com.ddd.sonnypolabobe.global.security
 
 import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DiscordApiClient
-import com.ddd.sonnypolabobe.global.util.HttpLog
 import com.ddd.sonnypolabobe.logger
 import com.fasterxml.jackson.databind.ObjectMapper
 import io.jsonwebtoken.JwtException
@@ -16,7 +15,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper
 import org.springframework.web.util.ContentCachingResponseWrapper
 import org.springframework.web.util.WebUtils
 import java.io.UnsupportedEncodingException
-import java.time.LocalDateTime
 import java.util.*
 
 
@@ -42,30 +40,19 @@ class JwtExceptionFilter(
                 val startedAt = System.currentTimeMillis()
                 filterChain.doFilter(requestWrapper, responseWrapper)
                 val endedAt = System.currentTimeMillis()
-                logger().info(
-                    "\n" +
-                            "[REQUEST] ${request.method} - ${request.requestURI} ${responseWrapper.status} - ${(endedAt - startedAt) / 10000.0} \n" +
-                            "Headers : ${getHeaders(request)} \n" +
-                            "Parameters : ${getRequestParams(request)} \n" +
-                            "Request body : ${getRequestBody(requestWrapper)} \n" +
-                            "Response body : ${getResponseBody(responseWrapper)}"
-                )
+
+                val message = "\n" +
+                        "[REQUEST] ${request.method} - ${request.requestURI} ${responseWrapper.status} - ${(endedAt - startedAt) / 10000.0} \n" +
+                        "Headers : ${getHeaders(request)} \n" +
+                        "Parameters : ${getRequestParams(request)} \n" +
+                        "Request body : ${getRequestBody(requestWrapper)} \n" +
+                        "Response body : ${getResponseBody(responseWrapper)}"
+                logger().error(message)
                 if (responseWrapper.status >= 400 && getResponseBody(responseWrapper).contains(
                         CustomErrorCode.INTERNAL_SERVER_EXCEPTION.message
                     )
                 ) {
-                    this.discordApiClient.sendErrorLog(
-                        HttpLog(
-                            request.method,
-                            request.requestURI,
-                            responseWrapper.status,
-                            (endedAt - startedAt) / 10000.0,
-                            getHeaders(request),
-                            getRequestParams(request),
-                            getRequestBody(requestWrapper),
-                            getResponseBody(responseWrapper)
-                        )
-                    )
+                    this.discordApiClient.sendErrorLog(message)
                 }
             }
         } catch (e: JwtException) {
