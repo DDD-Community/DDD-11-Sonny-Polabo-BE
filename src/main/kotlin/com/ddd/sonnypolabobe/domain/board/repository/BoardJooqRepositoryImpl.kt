@@ -67,7 +67,6 @@ class BoardJooqRepositoryImpl(
         return this.dslContext
             .selectCount()
             .from(jBoard)
-            .where(jBoard.YN.eq(1).and(jBoard.ACTIVEYN.eq(1)))
             .fetchOne(0, Long::class.java) ?: 0
     }
 
