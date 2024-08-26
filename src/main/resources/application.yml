@@ -1,3 +1,15 @@
 spring:
   application:
     name: polabo-api
+
+server:
+  port: 8080
+  shutdown: graceful
+
+
+jasypt:
+  encryptor:
+    bean: jasyptStringEncryptor
+
+limit:
+  count: 100

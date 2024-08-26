@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration scan="true" scanPeriod="5 seconds">
+
+  <timestamp key="timestamp" datePattern="yyyy-MM-dd-HH-mm-ssSSS"/>
+
+  <appender name="CONSOLE"
+    class="ch.qos.logback.core.ConsoleAppender">
+    <layout class="ch.qos.logback.classic.PatternLayout">
+      <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %highlight(%-5level) %magenta(%-4relative) --- [${appName}, %blue(%X{traceId}), %green(%X{spanId}) %X{sessionId}] %cyan(%logger{20}) : %msg%n
+      </pattern>
+    </layout>
+  </appender>
+
+  <springProfile name="prod">
+    <property name="appName" value="prod-api"/>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+  <springProfile name="dev">
+    <property name="appName" value="dev-api"/>
+
+    <logger name="org.jooq" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+
+
+  <springProfile name="local">
+    <property name="appName" value="local-api"/>
+
+    <logger name="org.jooq" level="DEBUG" additivity="false">
+      <appender-ref ref="CONSOLE"/>
+    </logger>
+
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+    </root>
+  </springProfile>
+</configuration>
