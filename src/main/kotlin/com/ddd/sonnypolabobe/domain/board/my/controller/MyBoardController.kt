@@ -6,22 +6,26 @@ import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.entity.PageDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/api/v1/my/boards")
-class MyBoardController(private val myBoardService : MyBoardService) {
+class MyBoardController(private val myBoardService: MyBoardService) {
 
-    @Operation(summary = "내 보드 목록 조회", description = """
+    @Operation(
+        summary = "내 보드 목록 조회", description = """
         내 보드 목록을 조회합니다.
-    """)
+    """
+    )
     @GetMapping
     fun getMyBoards(
-        @RequestParam(name = "page", defaultValue = "1") page : Int,
-        @RequestParam size : Int
-    ) : ApplicationResponse<PageDto<MyBoardDto.Companion.PageListRes>> {
-        val user = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+        @RequestParam(name = "page", defaultValue = "1") page: Int,
+        @RequestParam size: Int
+    ): ApplicationResponse<PageDto<MyBoardDto.Companion.PageListRes>> {
+        val user =
+            SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         return ApplicationResponse.ok(this.myBoardService.getMyBoards(user.id, page, size))
     }
 
@@ -34,10 +38,11 @@ class MyBoardController(private val myBoardService : MyBoardService) {
     )
     @PutMapping("/{id}")
     fun updateMyBoard(
-        @PathVariable id : String,
-        @RequestBody request : MyBoardDto.Companion.MBUpdateReq
-    ) : ApplicationResponse<Nothing> {
-        val userId = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+        @PathVariable id: String,
+        @RequestBody request: MyBoardDto.Companion.MBUpdateReq
+    ): ApplicationResponse<Nothing> {
+        val userId =
+            SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         this.myBoardService.updateMyBoard(id, request, userId.id)
         return ApplicationResponse.ok()
     }
@@ -50,10 +55,25 @@ class MyBoardController(private val myBoardService : MyBoardService) {
     )
     @DeleteMapping("/{id}")
     fun deleteMyBoard(
-        @PathVariable id : String
-    ) : ApplicationResponse<Nothing> {
-        val userId = SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+        @PathVariable id: String
+    ): ApplicationResponse<Nothing> {
+        val userId =
+            SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         this.myBoardService.deleteMyBoard(id, userId.id)
         return ApplicationResponse.ok()
+    }
+
+    @Tag(name = "1.1.0")
+    @Operation(
+        summary = "내가 만든 보드 총 개수",
+        description = """
+            내가 만든 보드의 총 개수를 조회합니다.
+        """
+    )
+    @GetMapping("/total-count")
+    fun getTotalCount(): ApplicationResponse<MyBoardDto.Companion.TotalCountRes> {
+        val userId =
+            SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+        return ApplicationResponse.ok(this.myBoardService.getTotalCount(userId.id))
     }
 }

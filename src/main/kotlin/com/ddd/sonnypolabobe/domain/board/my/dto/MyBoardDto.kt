@@ -24,7 +24,12 @@ class MyBoardDto {
             val title: String,
             @DateTimeFormat(pattern = "yyyy-MM-dd", iso = DateTimeFormat.ISO.DATE)
             val createdAt: LocalDateTime,
-            val userId : Long?
+            val userId: Long?
+        )
+
+        data class TotalCountRes(
+            val totalCreateCount: Long,
+            val totalParticipantCount: Long
         )
 
     }
