@@ -10,6 +10,7 @@ import com.ddd.sonnypolabobe.jooq.polabo.tables.Board
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import org.jooq.DSLContext
 import org.jooq.Record6
+import org.jooq.Record7
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 import java.util.*
@@ -36,7 +37,7 @@ class BoardJooqRepositoryImpl(
         return if (result == 1) id else null
     }
 
-    override fun selectOneById(id: UUID): Array<out Record6<String?, Long?, String?, String?, LocalDateTime?, Long?>> {
+    override fun selectOneById(id: UUID): Array<out Record7<String?, Long?, String?, String?, LocalDateTime?, Long?, String?>> {
         val jBoard = Board.BOARD
         val jPolaroid = Polaroid.POLAROID
         return this.dslContext
@@ -46,7 +47,8 @@ class BoardJooqRepositoryImpl(
                 jPolaroid.IMAGE_KEY,
                 jPolaroid.ONE_LINE_MESSAGE,
                 jPolaroid.CREATED_AT,
-                jPolaroid.USER_ID
+                jPolaroid.USER_ID,
+                jPolaroid.NICKNAME
             )
             .from(jBoard)
             .leftJoin(jPolaroid).on(
@@ -147,6 +149,46 @@ class BoardJooqRepositoryImpl(
             .selectCount()
             .from(jBoard)
             .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
+            .fetchOne(0, Long::class.java) ?: 0L
+    }
+
+    override fun findAllByParticipant(
+        userId: Long,
+        page: Int,
+        size: Int
+    ): List<MyBoardDto.Companion.PageListRes> {
+        val jBoard = Board.BOARD
+        val jPolaroid = Polaroid.POLAROID
+        val data = this.dslContext.select(
+            jBoard.ID,
+            jBoard.TITLE,
+            jBoard.CREATED_AT
+        )
+            .from(jBoard)
+            .innerJoin(jPolaroid).on(
+                jBoard.ID.eq(jPolaroid.BOARD_ID).and(jPolaroid.USER_ID.eq(userId))
+                    .and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1))
+            )
+
+        return data.map {
+            MyBoardDto.Companion.PageListRes(
+                id = UuidConverter.byteArrayToUUID(it.get("id", ByteArray::class.java)!!),
+                title = it.get("title", String::class.java)!!,
+                createdAt = it.get("created_at", LocalDateTime::class.java)!!,
+            )
+        }
+    }
+
+    override fun selectTotalCountByParticipant(userId: Long): Long {
+        val jBoard = Board.BOARD
+        val jPolaroid = Polaroid.POLAROID
+        return this.dslContext
+            .selectCount()
+            .from(jBoard)
+            .innerJoin(jPolaroid).on(
+                jBoard.ID.eq(jPolaroid.BOARD_ID).and(jPolaroid.USER_ID.eq(userId))
+                    .and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1))
+            )
             .fetchOne(0, Long::class.java) ?: 0L
     }
 }

@@ -19,12 +19,14 @@ class BoardService(
     @Value("\${limit.count}")
     private val limit: Int
 ) {
-    fun create(request: BoardCreateRequest): UUID = this.boardJooqRepository.insertOne(request)?.let { UuidConverter.byteArrayToUUID(it) }
-        ?: throw ApplicationException(CustomErrorCode.BOARD_CREATED_FAILED)
+    fun create(request: BoardCreateRequest): UUID =
+        this.boardJooqRepository.insertOne(request)?.let { UuidConverter.byteArrayToUUID(it) }
+            ?: throw ApplicationException(CustomErrorCode.BOARD_CREATED_FAILED)
 
     fun getById(id: String): List<BoardGetResponse> {
         return id.run {
-            val queryResult = boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
+            val queryResult =
+                boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
             val groupByTitle = queryResult.groupBy { it.value1() }
             groupByTitle.map { entry ->
                 val title = entry.key
@@ -33,7 +35,8 @@ class BoardService(
                         id = it.value2() ?: 0L,
                         imageUrl = it.value3()?.let { it1 -> s3Util.getImgUrl(it1) } ?: "",
                         oneLineMessage = it.value4() ?: "폴라보와의 추억 한 줄",
-                        userId = it.value6() ?: 0L
+                        userId = it.value6() ?: 0L,
+                        nickname = it.value7() ?: ""
                     )
                 }.filter { it.id != 0L }
                 BoardGetResponse(title = title ?: "", items = polaroids)

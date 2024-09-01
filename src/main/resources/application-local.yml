@@ -20,27 +20,7 @@ spring:
   jooq:
     sql-dialect: mysql
 
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client-id: ENC(BD9NHDqbUHDpLXYtua4QLLznXweUau5/N3dA1IQqKhQW2sWvniKSDTS3+Z9t/oct)
-            client-secret: ENC(dMTqjTdS4VJz/1Gduapvl1rDDXUUKkp0bilgqRWMI9X4DaAMVDXY13Fb7QMBDUkI)
-            scope:
-              - account_email
-              - profile_nickname
-            authorization-grant-type: authorization_code
-            redirect-uri: https://api-dev.polabo.site/api/v1/oauth/sign-in
-            client-name: Kakao
-            client-authentication-method: client_secret_post
 
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
 
 cloud:
   aws:

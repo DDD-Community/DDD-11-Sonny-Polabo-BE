@@ -36,7 +36,8 @@ class SecurityConfig(
             "/swagger-ui/**",
             "/v3/api-docs/**",
             "/api/v1/polaroids/{id}",
-            "/api/v1/boards/{boardId}/polaroids"
+            "/api/v1/boards/{boardId}/polaroids",
+            "/api/v2/boards/{boardId}/polaroids",
         )
     }
     @Bean

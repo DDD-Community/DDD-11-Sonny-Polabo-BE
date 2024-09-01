@@ -21,6 +21,25 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
             this.yn = 1
             this.activeyn = 1
+            this.nickname = request.nickname
+        }
+        return this.dslContext.insertInto(jPolaroid)
+            .set(insertValue)
+            .returningResult(jPolaroid.ID)
+            .fetchOne()?.value1() ?: 0
+    }
+
+    override fun insertOne(boardId: ByteArray, request: PolaroidCreateRequest, userId: Long): Long {
+        val jPolaroid = Polaroid.POLAROID
+        val insertValue = jPolaroid.newRecord().apply {
+            this.boardId = boardId
+            this.imageKey = request.imageKey
+            this.oneLineMessage = request.oneLineMessage
+            this.createdAt = DateConverter.convertToKst(LocalDateTime.now())
+            this.userId = userId
+            this.yn = 1
+            this.activeyn = 1
+            this.nickname = request.nickname
         }
         return this.dslContext.insertInto(jPolaroid)
             .set(insertValue)
