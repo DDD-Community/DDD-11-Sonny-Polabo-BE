@@ -159,6 +159,12 @@ class BoardJooqRepositoryImpl(
     ): List<MyBoardDto.Companion.PageListRes> {
         val jBoard = Board.BOARD
         val jPolaroid = Polaroid.POLAROID
+        val boardSubQuery =
+            this.dslContext.select(jBoard.ID.`as`("id"))
+            .from(jBoard)
+            .where(jBoard.USER_ID.eq(userId).and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1)))
+            .asTable()
+
         val data = this.dslContext.select(
             jBoard.ID,
             jBoard.TITLE,
@@ -169,6 +175,10 @@ class BoardJooqRepositoryImpl(
                 jBoard.ID.eq(jPolaroid.BOARD_ID).and(jPolaroid.USER_ID.eq(userId))
                     .and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1))
             )
+            .where(jBoard.ID.notIn(
+                this.dslContext.select(boardSubQuery.field("id", ByteArray::class.java))
+                    .from(boardSubQuery)
+            ))
 
         return data.map {
             MyBoardDto.Companion.PageListRes(
