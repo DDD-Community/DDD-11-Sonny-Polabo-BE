@@ -28,7 +28,9 @@ class S3Util(
     @Value("\${cloud.aws.region.static}")
     private val region: String,
     @Value("\${running.name}")
-    private val runningName: String
+    private val runningName: String,
+    @Value("\${aws.cloudfront.domain}")
+    private val cloudfrontDomain: String,
 ) {
 
     fun awsCredentials(): BasicAWSCredentials {
@@ -50,10 +52,7 @@ class S3Util(
         return amazonS3Client().generatePresignedUrl(request)
     }
 
-    fun getImgUrl(fileName: String): String {
-        val url: URL = amazonS3Client().getUrl(bucket, runningName + File.separator + fileName)
-        return url.toString()
-    }
+    fun getImgUrl(fileName: String): String = "$cloudfrontDomain/$runningName/$fileName"
 
     fun deleteImage(fileUrl: String) {
         try {

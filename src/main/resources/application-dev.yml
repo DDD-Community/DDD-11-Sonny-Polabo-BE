@@ -51,6 +51,9 @@ cloud:
       bucket: ENC(nLu55KOteQJS+LGFKjfITxZdfaWyZV6C)
     region:
       static: ap-northeast-2
+aws:
+  cloudfront:
+    domain: ENC(5AUXhCDMkJlNZa6tI8NIRY3z1kXAtgF0Bb6N3DyujlkOg0iJqK6mV7YYd5rMm1X3)
 
 running:
   name: dev
