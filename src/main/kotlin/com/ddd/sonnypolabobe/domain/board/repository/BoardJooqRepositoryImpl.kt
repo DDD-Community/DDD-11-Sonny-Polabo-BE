@@ -11,6 +11,7 @@ import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import org.jooq.DSLContext
 import org.jooq.Record6
 import org.jooq.Record7
+import org.jooq.impl.DSL
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
 import java.util.*
@@ -131,7 +132,7 @@ class BoardJooqRepositoryImpl(
             .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
             .orderBy(jBoard.CREATED_AT.desc())
             .limit(size)
-            .offset(page * size)
+            .offset(page)
             .fetch()
 
         return data.map {
@@ -162,7 +163,7 @@ class BoardJooqRepositoryImpl(
         val boardSubQuery =
             this.dslContext.select(jBoard.ID.`as`("id"))
             .from(jBoard)
-            .where(jBoard.USER_ID.eq(userId).and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1)))
+            .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
             .asTable()
 
         val data = this.dslContext.select(
@@ -179,26 +180,40 @@ class BoardJooqRepositoryImpl(
                 this.dslContext.select(boardSubQuery.field("id", ByteArray::class.java))
                     .from(boardSubQuery)
             ))
+            .orderBy(jBoard.CREATED_AT.desc())
+            .limit(size)
+            .offset(page)
 
-        return data.map {
+        return data
+            .map {
             MyBoardDto.Companion.PageListRes(
                 id = UuidConverter.byteArrayToUUID(it.get("id", ByteArray::class.java)!!),
                 title = it.get("title", String::class.java)!!,
                 createdAt = it.get("created_at", LocalDateTime::class.java)!!,
             )
-        }
+        }.distinct()
     }
 
     override fun selectTotalCountByParticipant(userId: Long): Long {
         val jBoard = Board.BOARD
         val jPolaroid = Polaroid.POLAROID
+        val boardSubQuery =
+            this.dslContext.select(jBoard.ID.`as`("id"))
+                .from(jBoard)
+                .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
+                .asTable()
         return this.dslContext
-            .selectCount()
+            .select(DSL.countDistinct(jBoard.ID))
             .from(jBoard)
             .innerJoin(jPolaroid).on(
                 jBoard.ID.eq(jPolaroid.BOARD_ID).and(jPolaroid.USER_ID.eq(userId))
                     .and(jPolaroid.YN.eq(1)).and(jPolaroid.ACTIVEYN.eq(1))
             )
-            .fetchOne(0, Long::class.java) ?: 0L
+            .where(jBoard.ID.notIn(
+                this.dslContext.select(boardSubQuery.field("id", ByteArray::class.java))
+                    .from(boardSubQuery)
+            ))
+            .fetchOne(0, Long::class.java)
+            ?: 0L
     }
 }
