@@ -8,4 +8,5 @@ interface PolaroidJooqRepository {
     fun selectOneById(id: Long): PolaroidRecord
     fun countByBoardId(uuidToByteArray: ByteArray): Int
     fun insertOne(boardId: ByteArray, request: PolaroidCreateRequest, userId: Long): Long
+    fun deleteById(id: Long)
 }

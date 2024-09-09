@@ -1,8 +1,10 @@
 package com.ddd.sonnypolabobe.domain.polaroid.service
 
+import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
 import com.ddd.sonnypolabobe.domain.polaroid.repository.PolaroidJooqRepository
+import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
 import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.S3Util
@@ -13,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 class PolaroidService(
     private val polaroidJooqRepository: PolaroidJooqRepository,
+    private val boardJooqRepository: BoardJooqRepository,
     private val s3Util: S3Util
 ) {
     @Transactional
@@ -28,14 +31,20 @@ class PolaroidService(
     }
 
     @Transactional(readOnly = true)
-    fun getById(id: Long): PolaroidGetResponse {
-        return this.polaroidJooqRepository.selectOneById(id).let {
+    fun getById(id: Long, user: UserDto.Companion.Res): PolaroidGetResponse {
+        val data = this.polaroidJooqRepository.selectOneById(id)
+        val boardWriter =
+            this.boardJooqRepository.findById(UuidConverter.byteArrayToUUID(data.boardId!!))
+                ?: throw ApplicationException(CustomErrorCode.BOARD_NOT_FOUND)
+        return data.let {
             PolaroidGetResponse(
                 id = it.id!!,
                 imageUrl = s3Util.getImgUrl(it.imageKey!!),
                 oneLineMessage = it.oneLineMessage ?: "",
                 userId = it.userId,
-                nickname = it.nickname ?: ""
+                nickname = it.nickname ?: "",
+                isMine = boardWriter.userId == user.id,
+                createdAt = it.createdAt
             )
         }
     }
@@ -51,5 +60,15 @@ class PolaroidService(
             request,
             userId
         )
+    }
+
+    @Transactional
+    fun deleteById(id: Long, user: UserDto.Companion.Res) {
+        val data = this.polaroidJooqRepository.selectOneById(id)
+        val boardWriter =
+            this.boardJooqRepository.findById(UuidConverter.byteArrayToUUID(data.boardId!!))
+                ?: throw ApplicationException(CustomErrorCode.BOARD_NOT_FOUND)
+        if (boardWriter.userId != user.id) throw ApplicationException(CustomErrorCode.POLAROID_DELETE_FAILED)
+        this.polaroidJooqRepository.deleteById(id)
     }
 }

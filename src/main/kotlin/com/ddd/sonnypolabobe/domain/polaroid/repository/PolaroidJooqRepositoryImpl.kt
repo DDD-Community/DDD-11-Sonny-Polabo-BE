@@ -72,4 +72,13 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             )
             .fetchOne(0, Int::class.java) ?: 0
     }
+
+    override fun deleteById(id: Long) {
+        val jPolaroid = Polaroid.POLAROID
+        this.dslContext.update(jPolaroid)
+            .set(jPolaroid.YN, 0)
+            .set(jPolaroid.ACTIVEYN, 0)
+            .where(jPolaroid.ID.eq(id))
+            .execute()
+    }
 }
