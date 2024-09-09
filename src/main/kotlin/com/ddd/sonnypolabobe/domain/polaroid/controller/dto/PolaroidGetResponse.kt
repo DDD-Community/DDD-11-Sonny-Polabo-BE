@@ -1,6 +1,7 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller.dto
 
 import io.swagger.v3.oas.annotations.media.Schema
+import java.time.LocalDateTime
 import java.util.UUID
 
 data class PolaroidGetResponse(
@@ -13,5 +14,9 @@ data class PolaroidGetResponse(
     @Schema(description = "작성자 ID", example = "userId")
     val userId: Long?,
     @Schema(description = "작성자 닉네임", example = "nickname")
-    val nickname: String
+    val nickname: String,
+    @Schema(description = "작성자인지 여부", example = "true")
+    val isMine: Boolean,
+    @Schema(description = "생성일시", example = "2021-01-01T00:00:00")
+    val createdAt: LocalDateTime?
 )
