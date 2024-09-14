@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller.dto
 
+import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
 import java.util.UUID
@@ -18,5 +19,7 @@ data class PolaroidGetResponse(
     @Schema(description = "작성자인지 여부", example = "true")
     val isMine: Boolean,
     @Schema(description = "생성일시", example = "2021-01-01T00:00:00")
-    val createdAt: LocalDateTime?
+    val createdAt: LocalDateTime?,
+    @Schema(description = "옵션")
+    val options: Map<PolaroidOption, String>?
 )

@@ -6,6 +6,7 @@ import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import com.ddd.sonnypolabobe.jooq.polabo.tables.records.PolaroidRecord
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
@@ -22,6 +23,7 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.yn = 1
             this.activeyn = 1
             this.nickname = request.nickname
+            this.options = ObjectMapper().writeValueAsString(request.options)
         }
         return this.dslContext.insertInto(jPolaroid)
             .set(insertValue)
@@ -40,6 +42,7 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.yn = 1
             this.activeyn = 1
             this.nickname = request.nickname
+            this.options = ObjectMapper().writeValueAsString(request.options)
         }
         return this.dslContext.insertInto(jPolaroid)
             .set(insertValue)

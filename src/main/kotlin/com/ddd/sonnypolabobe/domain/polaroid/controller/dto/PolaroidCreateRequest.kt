@@ -1,5 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller.dto
 
+import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import io.swagger.v3.oas.annotations.media.Schema
 import jakarta.validation.constraints.Size
 
@@ -11,5 +12,7 @@ data class PolaroidCreateRequest(
     @field:Size(max = 20)
     val oneLineMessage : String,
     @Schema(description = "작성자 닉네임이 null 이면서 회원가입된 유저라면, 유저의 닉네임을 자동할당합니다.", example = "작성자 닉네임")
-    var nickname : String?
+    var nickname : String?,
+    @Schema(description = "폴라로이드 옵션", examples = ["FONT", "FILTER", "THEMA"])
+    val options : Map<PolaroidOption, String>
 )

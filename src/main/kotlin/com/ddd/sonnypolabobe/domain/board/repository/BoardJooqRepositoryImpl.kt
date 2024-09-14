@@ -3,12 +3,14 @@ package com.ddd.sonnypolabobe.domain.board.repository
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardCreateRequest
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
 import com.ddd.sonnypolabobe.domain.board.my.dto.MyBoardDto
+import com.ddd.sonnypolabobe.domain.board.repository.vo.BoardGetOneVo
 import com.ddd.sonnypolabobe.domain.user.dto.GenderType
 import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.global.util.UuidConverter
 import com.ddd.sonnypolabobe.global.util.UuidGenerator
 import com.ddd.sonnypolabobe.jooq.polabo.enums.UserGender
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Board
+import com.ddd.sonnypolabobe.jooq.polabo.tables.BoardSticker
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import com.ddd.sonnypolabobe.jooq.polabo.tables.User
 import org.jooq.*
@@ -43,18 +45,21 @@ class BoardJooqRepositoryImpl(
         return if (result == 1) id else null
     }
 
-    override fun selectOneById(id: UUID): Array<out Record7<String?, Long?, String?, String?, LocalDateTime?, Long?, String?>> {
+    override fun selectOneById(id: UUID): List<BoardGetOneVo> {
         val jBoard = Board.BOARD
         val jPolaroid = Polaroid.POLAROID
+
         return this.dslContext
             .select(
+                jBoard.ID.convertFrom { it?.let{UuidConverter.byteArrayToUUID(it) } },
                 jBoard.TITLE,
-                jPolaroid.ID,
+                jPolaroid.ID.`as`(BoardGetOneVo::polaroidId.name),
                 jPolaroid.IMAGE_KEY,
                 jPolaroid.ONE_LINE_MESSAGE,
                 jPolaroid.CREATED_AT,
                 jPolaroid.USER_ID,
-                jPolaroid.NICKNAME
+                jPolaroid.NICKNAME,
+                jPolaroid.OPTIONS
             )
             .from(jBoard)
             .leftJoin(jPolaroid).on(
@@ -66,7 +71,7 @@ class BoardJooqRepositoryImpl(
                     .and(jBoard.ACTIVEYN.eq(1))
             )
             .orderBy(jPolaroid.CREATED_AT.desc())
-            .fetchArray()
+            .fetchInto(BoardGetOneVo::class.java)
 
     }
 
