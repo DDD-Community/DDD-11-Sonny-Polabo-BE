@@ -1,6 +1,7 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller
 
 import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
+import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import com.ddd.sonnypolabobe.domain.polaroid.service.PolaroidService
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import com.ddd.sonnypolabobe.global.security.JwtUtil
@@ -9,7 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.web.bind.annotation.*
 
-@Tag(name = "1.1.0")
+@Tag(name = "1.3.0")
 @RestController
 @RequestMapping("/api/v2/boards/{boardId}/polaroids")
 class BoardPolaroidV2Controller(
@@ -21,7 +22,9 @@ class BoardPolaroidV2Controller(
         summary = "폴라로이드 생성", description = """
         폴라로이드를 생성합니다.
         
-        작성자 닉네임이 추가되었습니다.
+        옵션을 추가했습니다. 
+        
+        enum에 따라 옵션을 선택해주세요.
     """
     )
     @PostMapping

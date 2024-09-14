@@ -28,19 +28,18 @@ class BoardController(
     """
     )
     @PostMapping
-    fun create(@RequestBody request: BoardCreateRequest)
-            : ApplicationResponse<UUID> {
+    fun create(@RequestBody request: BoardCreateRequest) : ApplicationResponse<UUID> {
         val user =
             SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         request.userId = user.id
         return ApplicationResponse.ok(this.boardService.create(request))
     }
 
-    @Tag(name = "1.2.0")
+    @Tag(name = "1.3.0")
     @Operation(
         summary = "보드 조회", description = """
         보드를 조회합니다.
-        DTO 필드 수정했습니다. 폴라로이드에 닉네임 필드 추가
+        DTO 필드 수정했습니다. 스티커 리스트 추가했습니다.
         
     """
     )
