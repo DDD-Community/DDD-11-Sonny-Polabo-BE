@@ -1,4 +1,4 @@
-package com.ddd.sonnypolabobe.domain.user.dto
+package com.ddd.sonnypolabobe.domain.user.withdraw.dto
 
 enum class WithdrawType(val description : String) {
     NOT_USE("더이상 사용하지 않아요"),

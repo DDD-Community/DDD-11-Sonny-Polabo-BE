@@ -3,12 +3,9 @@ package com.ddd.sonnypolabobe.domain.user.controller
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.domain.user.service.UserService
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
-import com.ddd.sonnypolabobe.global.util.DateConverter
 import io.swagger.v3.oas.annotations.Operation
-import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/api/v1/user")

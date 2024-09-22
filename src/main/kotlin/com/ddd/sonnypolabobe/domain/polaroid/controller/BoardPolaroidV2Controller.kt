@@ -1,6 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller
 
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import com.ddd.sonnypolabobe.domain.polaroid.service.PolaroidService
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
@@ -21,9 +21,7 @@ class BoardPolaroidV2Controller(
     @Operation(
         summary = "폴라로이드 생성", description = """
         폴라로이드를 생성합니다.
-        
         옵션을 추가했습니다. 
-        
         enum에 따라 옵션을 선택해주세요.
     """
     )

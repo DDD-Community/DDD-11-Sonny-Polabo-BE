@@ -1,8 +1,8 @@
 package com.ddd.sonnypolabobe.domain.polaroid.service
 
 import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidGetResponse
 import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import com.ddd.sonnypolabobe.domain.polaroid.repository.PolaroidJooqRepository
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto

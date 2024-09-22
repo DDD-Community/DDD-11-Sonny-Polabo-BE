@@ -4,7 +4,5 @@ import com.github.f4b6a3.uuid.UuidCreator
 import java.util.*
 
 object UuidGenerator {
-    fun create(): UUID {
-        return UuidCreator.getTimeOrderedEpochPlus1()
-    }
+    fun create(): UUID = UuidCreator.getTimeOrderedEpochPlus1()
 }

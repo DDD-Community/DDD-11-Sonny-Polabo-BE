@@ -1,6 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller
 
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidGetResponse
 import com.ddd.sonnypolabobe.domain.polaroid.service.PolaroidService
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse

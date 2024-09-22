@@ -2,7 +2,7 @@ package com.ddd.sonnypolabobe.domain.user.service
 
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.domain.user.repository.UserJooqRepository
-import com.ddd.sonnypolabobe.domain.user.repository.WithdrawJooqRepository
+import com.ddd.sonnypolabobe.domain.user.withdraw.repository.WithdrawJooqRepository
 import org.springframework.stereotype.Service
 
 @Service

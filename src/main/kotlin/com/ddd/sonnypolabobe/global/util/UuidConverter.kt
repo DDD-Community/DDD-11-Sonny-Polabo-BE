@@ -20,17 +20,12 @@ object UuidConverter {
         return byteBuffer.array()
     }
 
-    fun stringToUUID(uuid: String): UUID {
-        return try {
-            UUID.fromString(uuid)
-        } catch (e: IllegalArgumentException) {
-            throw ApplicationException(
-                CustomErrorCode.BOARD_NOT_FOUND
-            )
-        }
+    fun stringToUUID(uuid: String): UUID = try {
+        UUID.fromString(uuid)
+    } catch (e: IllegalArgumentException) {
+        throw ApplicationException(
+            CustomErrorCode.BOARD_NOT_FOUND
+        )
     }
 
-    fun uuidToString(uuid: UUID): String {
-        return uuid.toString()
-    }
 }

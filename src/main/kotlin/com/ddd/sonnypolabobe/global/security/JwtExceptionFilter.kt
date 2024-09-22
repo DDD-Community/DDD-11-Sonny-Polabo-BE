@@ -67,9 +67,7 @@ class JwtExceptionFilter(
         }
     }
 
-    private fun excludeLogging(requestURI: String): Boolean {
-        return excludedUrls.any { requestURI.startsWith(it) }
-    }
+    private fun excludeLogging(requestURI: String): Boolean = excludedUrls.any { requestURI.startsWith(it) }
 
     private fun getResponseBody(response: ContentCachingResponseWrapper): String {
         var payload: String? = null

@@ -9,7 +9,6 @@ import io.jsonwebtoken.security.Keys
 import jakarta.xml.bind.DatatypeConverter
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
-import java.nio.charset.StandardCharsets
 import java.security.Key
 import java.util.*
 
@@ -38,7 +37,13 @@ class JwtUtil(
             .setExpiration(expiredDate)
             .signWith(SignatureAlgorithm.HS512, getKeyBytes(accessSecretKey))
             .compact()
-        return UserDto.Companion.TokenRes(accessToken, generateRefreshToken(request), expiredDate, false, request.nickName)
+        return UserDto.Companion.TokenRes(
+            accessToken,
+            generateRefreshToken(request),
+            expiredDate,
+            false,
+            request.nickName
+        )
     }
 
     fun generateRefreshToken(request: UserDto.Companion.CreateTokenReq): String {
@@ -123,10 +128,4 @@ class JwtUtil(
     private fun getKeyBytes(secretKey: String): ByteArray {
         return DatatypeConverter.parseBase64Binary((secretKey))
     }
-
-    private fun getKey(secretKey: String): Key {
-        val keyBytes = Base64.getDecoder().decode(secretKey)
-        return Keys.hmacShaKeyFor(keyBytes)
-    }
-
 }

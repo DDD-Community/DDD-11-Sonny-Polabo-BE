@@ -3,9 +3,7 @@ package com.ddd.sonnypolabobe.domain.board.service
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardCreateRequest
 import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
 import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
-import com.ddd.sonnypolabobe.domain.board.sticker.dto.StickerGetResponse
-import com.ddd.sonnypolabobe.domain.board.sticker.repository.BoardStickerRepository
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidGetResponse
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidGetResponse
 import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
@@ -18,12 +16,10 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.util.*
-import javax.swing.text.html.HTML.Tag.U
 
 @Service
 class BoardService(
     private val boardJooqRepository: BoardJooqRepository,
-    private val boardStickerRepository: BoardStickerRepository,
     private val s3Util: S3Util,
     @Value("\${limit.count}")
     private val limit: Int
@@ -36,7 +32,6 @@ class BoardService(
         return id.run {
             val queryResult =
                 boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
-            val stickers = boardStickerRepository.findByBoardId(UuidConverter.stringToUUID(id))
             val groupByTitle = queryResult.groupBy { it.title }
             groupByTitle.map { entry ->
                 val title = entry.key
@@ -53,7 +48,7 @@ class BoardService(
 
                     )
                 }.filter { it.id != 0L }.distinctBy { it.id }
-                BoardGetResponse(title = title ?: "", items = polaroids, stickers = stickers)
+                BoardGetResponse(title = title ?: "", items = polaroids)
             }
         }
     }
