@@ -1,6 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.repository
 
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
 import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DateConverter

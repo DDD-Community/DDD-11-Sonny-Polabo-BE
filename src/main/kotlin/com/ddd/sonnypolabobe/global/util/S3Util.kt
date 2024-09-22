@@ -33,16 +33,11 @@ class S3Util(
     private val cloudfrontDomain: String,
 ) {
 
-    fun awsCredentials(): BasicAWSCredentials {
-        return BasicAWSCredentials(accessKey, secretKey)
-    }
-
-    fun amazonS3Client(): AmazonS3 {
-        return AmazonS3ClientBuilder.standard()
-            .withCredentials(AWSStaticCredentialsProvider(awsCredentials()))
-            .withRegion(region)
-            .build()
-    }
+    fun awsCredentials(): BasicAWSCredentials = BasicAWSCredentials(accessKey, secretKey)
+    fun amazonS3Client(): AmazonS3 = AmazonS3ClientBuilder.standard()
+        .withCredentials(AWSStaticCredentialsProvider(awsCredentials()))
+        .withRegion(region)
+        .build()
 
     fun getPreSignedUrl(fileName: String): URL {
         val path: String = (runningName + File.separator) + fileName

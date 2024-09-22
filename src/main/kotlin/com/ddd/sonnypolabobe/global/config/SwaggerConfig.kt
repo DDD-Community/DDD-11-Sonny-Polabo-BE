@@ -15,7 +15,7 @@ class SwaggerConfig {
     @Bean
     fun openAPI(): OpenAPI {
         val securityScheme: SecurityScheme = getSecurityScheme()
-        val securityRequirement: SecurityRequirement = getSecurityRequireMent()
+        val securityRequirement: SecurityRequirement = getSecurityRequirement()
 
         return OpenAPI()
             .addServersItem(Server().url("/"))
@@ -23,12 +23,11 @@ class SwaggerConfig {
             .security(listOf(securityRequirement))
     }
 
-    private fun getSecurityScheme(): SecurityScheme {
-        return SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
+    private fun getSecurityScheme(): SecurityScheme =
+        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
             .`in`(SecurityScheme.In.HEADER).name("Authorization")
-    }
 
-    private fun getSecurityRequireMent(): SecurityRequirement {
-        return SecurityRequirement().addList("bearerAuth")
-    }
+
+    private fun getSecurityRequirement(): SecurityRequirement =
+        SecurityRequirement().addList("bearerAuth")
 }

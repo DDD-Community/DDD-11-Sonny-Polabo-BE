@@ -10,8 +10,11 @@ import org.springframework.web.servlet.HandlerInterceptor
 class RateLimitingInterceptor(private val rateLimitingService: RateLimitingService) :
     HandlerInterceptor {
 
-    override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        // 특정 URL 패턴을 필터링합니다.
+    override fun preHandle(
+        request: HttpServletRequest,
+        response: HttpServletResponse,
+        handler: Any
+    ): Boolean {
         if (request.requestURI == "/api/v1/boards" && request.method == "POST") {
             if (!rateLimitingService.incrementRequestCount()) {
                 response.status = HttpStatus.TOO_MANY_REQUESTS.value()

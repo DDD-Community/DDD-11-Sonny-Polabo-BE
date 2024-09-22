@@ -10,17 +10,17 @@ import org.springframework.context.annotation.Configuration
 class JasyptConfig {
 
     @Bean("jasyptStringEncryptor")
-    fun stringEncryptor(): StringEncryptor {
-        val encryptor = PooledPBEStringEncryptor()
-        val config = SimpleStringPBEConfig()
-        config.password = System.getenv("JASYPT_ENCRYPTOR_PASSWORD")
-        config.algorithm = "PBEWithMD5AndDES"
-        config.setKeyObtentionIterations("1000")
-        config.setPoolSize("1")
-        config.stringOutputType = "base64"
-        config.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator")
-        config.setIvGeneratorClassName("org.jasypt.iv.NoIvGenerator")
-        encryptor.setConfig(config)
-        return encryptor
+    fun stringEncryptor(): StringEncryptor = PooledPBEStringEncryptor().apply {
+        this.setConfig(
+            SimpleStringPBEConfig().apply {
+                this.password = System.getenv("JASYPT_ENCRYPTOR_PASSWORD")
+                this.algorithm = "PBEWithMD5AndDES"
+                this.setKeyObtentionIterations("1000")
+                this.setPoolSize("1")
+                this.stringOutputType = "base64"
+                this.setSaltGeneratorClassName("org.jasypt.salt.RandomSaltGenerator")
+                this.setIvGeneratorClassName("org.jasypt.iv.NoIvGenerator")
+            }
+        )
     }
 }

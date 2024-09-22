@@ -23,18 +23,16 @@ class DiscordApiClient(
         .build()
 
     fun sendErrorLog(req: String) {
-        val embedData: MutableMap<String, Any> = HashMap()
-
-        embedData["title"] = "서버 에러 발생"
-
-        val field1: MutableMap<String, String> = HashMap()
-        field1["name"] = "요청"
-        field1["value"] = req
-
-        embedData["fields"] = listOf<Map<String, String>>(field1)
-
-        val payload: MutableMap<String, Any> = HashMap()
-        payload["embeds"] = arrayOf<Any>(embedData)
+        val payload = """
+            {
+              "content": "서버 알림",
+              "tts": false,
+              "embeds": [{
+                "title": "에러 발생",
+                "description": "$req"
+              }]
+            }
+        """.trimIndent()
 
         sendDiscordComm()
             .post()
@@ -46,26 +44,16 @@ class DiscordApiClient(
     }
 
     fun sendErrorTrace(errorCode: String, message: String?, trace: String) {
-        val embedData: MutableMap<String, Any> = HashMap()
-
-        embedData["title"] = "서버 에러 발생"
-
-        val field1: MutableMap<String, String> = HashMap()
-        field1["name"] = "트레이스"
-        field1["value"] = trace
-
-        val field2: MutableMap<String, String> = HashMap()
-        field2["name"] = "에러 코드"
-        field2["value"] = errorCode
-
-        val field3: MutableMap<String, String> = HashMap()
-        field3["name"] = "메시지"
-        field3["value"] = message ?: "메시지 없음"
-
-        embedData["fields"] = listOf<Map<String, String>>(field1, field2, field3)
-
-        val payload: MutableMap<String, Any> = HashMap()
-        payload["embeds"] = arrayOf<Any>(embedData)
+        val payload = """
+            {
+              "content": "서버 알림",
+              "tts": false,
+              "embeds": [{
+                "title": "서버 에러 발생",
+                "description": "에러 코드 : ${errorCode} \n  트레이스 : $trace \n 메세지 : ${message ?: "메시지 없음"}"
+              }]
+            }
+        """.trimIndent()
 
         sendDiscordComm()
             .post()

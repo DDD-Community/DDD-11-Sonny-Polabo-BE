@@ -15,7 +15,7 @@ class GlobalExceptionHandler(
     @ExceptionHandler(ApplicationException::class)
     fun applicationException(ex: ApplicationException): ResponseEntity<ApplicationResponse<Error>> {
         logger().error("error : ${ex.error}")
-        if(ex.error.status.is5xxServerError) {
+        if (ex.error.status.is5xxServerError) {
             this.discordApiClient.sendErrorTrace(
                 ex.error.status.toString(), ex.error.message,
                 ex.stackTrace.contentToString()

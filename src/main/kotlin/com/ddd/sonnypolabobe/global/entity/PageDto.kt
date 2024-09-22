@@ -8,7 +8,6 @@ data class PageDto<T>(
     val currentPage: Int,
     val size : Int
 ) {
-
     constructor(
         data: List<T>,
         totalCount: Long,

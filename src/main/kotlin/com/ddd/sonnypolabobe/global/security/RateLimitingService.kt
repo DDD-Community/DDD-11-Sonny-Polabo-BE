@@ -29,7 +29,5 @@ class RateLimitingService(
     }
 
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-    fun resetRequestCount() {
-        requestCounts.clear()
-    }
+    fun resetRequestCount() = requestCounts.clear()
 }
