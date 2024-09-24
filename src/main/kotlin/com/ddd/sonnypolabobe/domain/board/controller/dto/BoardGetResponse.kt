@@ -8,4 +8,6 @@ data class BoardGetResponse(
     val title: String,
     @field:Schema(description = "폴라로이드")
     val items: List<PolaroidGetResponse>,
+    @field:Schema(description = "작성자 여부", example = "true")
+    val isMine : Boolean
 )
