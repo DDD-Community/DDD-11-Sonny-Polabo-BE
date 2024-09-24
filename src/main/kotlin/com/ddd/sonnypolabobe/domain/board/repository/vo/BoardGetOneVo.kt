@@ -6,11 +6,12 @@ import java.util.UUID
 data class BoardGetOneVo(
     val id: UUID?,
     val title: String?,
+    val ownerId: Long?,
     val polaroidId : Long?,
     val imageKey : String?,
     val oneLineMessage: String?,
     val createdAt: LocalDateTime?,
     val userId : Long?,
-    val nickName: String?,
+    val nickname: String?,
     val options: String?
 )

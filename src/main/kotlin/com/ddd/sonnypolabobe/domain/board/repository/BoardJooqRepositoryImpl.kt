@@ -53,6 +53,7 @@ class BoardJooqRepositoryImpl(
             .select(
                 jBoard.ID.convertFrom { it?.let{UuidConverter.byteArrayToUUID(it) } },
                 jBoard.TITLE,
+                jBoard.USER_ID.`as`(BoardGetOneVo::ownerId.name),
                 jPolaroid.ID.`as`(BoardGetOneVo::polaroidId.name),
                 jPolaroid.IMAGE_KEY,
                 jPolaroid.ONE_LINE_MESSAGE,

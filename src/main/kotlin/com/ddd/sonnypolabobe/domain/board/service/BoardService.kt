@@ -32,6 +32,7 @@ class BoardService(
         return id.run {
             val queryResult =
                 boardJooqRepository.selectOneById(UuidConverter.stringToUUID(this@run))
+            if(queryResult.isEmpty()) throw ApplicationException(CustomErrorCode.BOARD_NOT_FOUND)
             val groupByTitle = queryResult.groupBy { it.title }
             groupByTitle.map { entry ->
                 val title = entry.key
@@ -41,14 +42,14 @@ class BoardService(
                         imageUrl = it.imageKey?.let { it1 -> s3Util.getImgUrl(it1) } ?: "",
                         oneLineMessage = it.oneLineMessage ?: "폴라보와의 추억 한 줄",
                         userId = it.userId ?: 0L,
-                        nickname = it.nickName ?: "",
+                        nickname = it.nickname ?: "",
                         isMine = it.userId == user?.id?.toLong(),
                         createdAt = it.createdAt,
                         options = it.options?.let{ ObjectMapper().readValue(it, object : TypeReference<Map<PolaroidOption, String>>() {})}
 
                     )
                 }.filter { it.id != 0L }.distinctBy { it.id }
-                BoardGetResponse(title = title ?: "", items = polaroids)
+                BoardGetResponse(title = title ?: "", items = polaroids, isMine = queryResult.first().ownerId == user?.id?.toLong())
             }
         }
     }
