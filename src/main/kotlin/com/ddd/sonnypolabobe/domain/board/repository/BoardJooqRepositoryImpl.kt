@@ -276,7 +276,7 @@ class BoardJooqRepositoryImpl(
                 .and(genderAndAgeGroupMatch(userGender, userAgeGroup))
         )
         .orderBy(field("sub_query.polaroid_count", Int::class.java).desc(), jBoard.CREATED_AT.desc())
-            .limit(8)
+            .limit(16)
             .fetchInto(String::class.java)
     }
 
