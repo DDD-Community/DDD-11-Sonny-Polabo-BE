@@ -50,7 +50,7 @@ class DiscordApiClient(
               "tts": false,
               "embeds": [{
                 "title": "서버 에러 발생",
-                "description": "에러 코드 : ${errorCode} \n  트레이스 : $trace \n 메세지 : ${message ?: "메시지 없음"}"
+                "description": "${message ?: "메시지 없음"}"
               }]
             }
         """.trimIndent()
