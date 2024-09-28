@@ -1,11 +1,12 @@
 package com.ddd.sonnypolabobe.domain.polaroid.repository
 
-import com.ddd.sonnypolabobe.domain.polaroid.controller.dto.PolaroidCreateRequest
+import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
 import com.ddd.sonnypolabobe.global.exception.CustomErrorCode
 import com.ddd.sonnypolabobe.global.util.DateConverter
 import com.ddd.sonnypolabobe.jooq.polabo.tables.Polaroid
 import com.ddd.sonnypolabobe.jooq.polabo.tables.records.PolaroidRecord
+import com.fasterxml.jackson.databind.ObjectMapper
 import org.jooq.DSLContext
 import org.springframework.stereotype.Repository
 import java.time.LocalDateTime
@@ -22,6 +23,7 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.yn = 1
             this.activeyn = 1
             this.nickname = request.nickname
+            this.options = ObjectMapper().writeValueAsString(request.options)
         }
         return this.dslContext.insertInto(jPolaroid)
             .set(insertValue)
@@ -40,6 +42,7 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
             this.yn = 1
             this.activeyn = 1
             this.nickname = request.nickname
+            this.options = ObjectMapper().writeValueAsString(request.options)
         }
         return this.dslContext.insertInto(jPolaroid)
             .set(insertValue)
@@ -71,5 +74,14 @@ class PolaroidJooqRepositoryImpl(private val dslContext: DSLContext) : PolaroidJ
                     .and(jPolaroid.ACTIVEYN.eq(1))
             )
             .fetchOne(0, Int::class.java) ?: 0
+    }
+
+    override fun deleteById(id: Long) {
+        val jPolaroid = Polaroid.POLAROID
+        this.dslContext.update(jPolaroid)
+            .set(jPolaroid.YN, 0)
+            .set(jPolaroid.ACTIVEYN, 0)
+            .where(jPolaroid.ID.eq(id))
+            .execute()
     }
 }

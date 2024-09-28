@@ -5,23 +5,19 @@ import com.ddd.sonnypolabobe.domain.board.controller.dto.BoardGetResponse
 import com.ddd.sonnypolabobe.domain.board.service.BoardService
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
-import com.ddd.sonnypolabobe.logger
+import com.ddd.sonnypolabobe.global.security.JwtUtil
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
 @Tag(name = "Board API", description = "보드 관련 API")
 @RestController
 @RequestMapping("/api/v1/boards")
 class BoardController(
-    private val boardService: BoardService
+    private val boardService: BoardService,
+    private val jwtUtil: JwtUtil
 ) {
     @Operation(
         summary = "보드 생성", description = """
@@ -32,23 +28,28 @@ class BoardController(
     """
     )
     @PostMapping
-    fun create(@RequestBody request: BoardCreateRequest)
-            : ApplicationResponse<UUID> {
+    fun create(@RequestBody request: BoardCreateRequest) : ApplicationResponse<UUID> {
         val user =
             SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
         request.userId = user.id
         return ApplicationResponse.ok(this.boardService.create(request))
     }
 
-    @Tag(name = "1.1.0")
+    @Tag(name = "1.3.0")
     @Operation(
         summary = "보드 조회", description = """
         보드를 조회합니다.
-        DTO 필드 수정했습니다. 폴라로이드에 닉네임 필드 추가
+        DTO 필드 수정했습니다. 스티커 리스트 추가했습니다.
+        
     """
     )
     @GetMapping("/{id}")
-    fun get(@PathVariable id: String) = ApplicationResponse.ok(this.boardService.getById(id))
+    fun get(@PathVariable id: String,
+            @RequestHeader("Authorization") token: String?
+    ) : ApplicationResponse<List<BoardGetResponse>> {
+        val user = token?.let { this.jwtUtil.getAuthenticatedMemberFromToken(it) }
+        return ApplicationResponse.ok(this.boardService.getById(id, user))
+    }
 
     @Operation(
         summary = "보드 누적 생성 수 조회", description = """
@@ -65,4 +66,17 @@ class BoardController(
     )
     @GetMapping("/create-available")
     fun createAvailable() = ApplicationResponse.ok(this.boardService.createAvailable())
+
+    @Tag(name = "1.2.0")
+    @Operation(
+        summary = "보드명 주제 추천", description = """
+        보드명 주제를 추천합니다.
+    """
+    )
+    @GetMapping("/recommend-title")
+    fun recommendTitle() : ApplicationResponse<List<String>> {
+        val user =
+            SecurityContextHolder.getContext().authentication.principal as UserDto.Companion.Res
+       return ApplicationResponse.ok(this.boardService.recommendTitle(user))
+    }
 }

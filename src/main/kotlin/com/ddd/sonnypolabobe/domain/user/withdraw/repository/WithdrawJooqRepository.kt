@@ -1,4 +1,4 @@
-package com.ddd.sonnypolabobe.domain.user.repository
+package com.ddd.sonnypolabobe.domain.user.withdraw.repository
 
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 

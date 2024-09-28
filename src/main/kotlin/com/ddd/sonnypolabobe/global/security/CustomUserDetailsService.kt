@@ -11,8 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 class CustomUserDetailsService(
     private val userJooqRepository: UserJooqRepository
 ) : UserDetailsService {
-    override fun loadUserByUsername(id: String): UserDetails {
-        return userJooqRepository.findById(id.toLong())
+    override fun loadUserByUsername(id: String): UserDetails =
+        this.userJooqRepository.findById(id.toLong())
             ?: throw IllegalArgumentException("해당하는 사용자를 찾을 수 없습니다.")
-    }
 }

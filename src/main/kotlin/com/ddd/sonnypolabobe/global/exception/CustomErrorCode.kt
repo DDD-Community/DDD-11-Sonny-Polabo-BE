@@ -26,4 +26,6 @@ enum class CustomErrorCode(
     BOARD_CREATED_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "BOARD001", "보드 생성에 실패했습니다."),
     BOARD_NOT_FOUND(HttpStatus.NOT_FOUND, "BOARD002", "보드를 찾을 수 없습니다."),
 
+    POLAROID_DELETE_FAILED(HttpStatus.UNAUTHORIZED, "POL003", "폴라로이드 삭제할 권한이 없습니다."),
+
 }

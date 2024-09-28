@@ -43,10 +43,10 @@ class JwtExceptionFilter(
 
                 val message = "\n" +
                         "[REQUEST] ${request.method} - ${request.requestURI} ${responseWrapper.status} - ${(endedAt - startedAt) / 10000.0} \n" +
-                        "Headers : ${getHeaders(request)} \n" +
-                        "Parameters : ${getRequestParams(request)} \n" +
-                        "Request body : ${getRequestBody(requestWrapper)} \n" +
-                        "Response body : ${getResponseBody(responseWrapper)}"
+                        "Headers - ${getHeaders(request)} \n" +
+                        "Parameters - ${getRequestParams(request)} \n" +
+                        "Request body - ${getRequestBody(requestWrapper)} \n" +
+                        "Response body - ${getResponseBody(responseWrapper)}"
                 logger().error(message)
                 if (responseWrapper.status >= 400 && getResponseBody(responseWrapper).contains(
                         CustomErrorCode.INTERNAL_SERVER_EXCEPTION.message
@@ -67,9 +67,7 @@ class JwtExceptionFilter(
         }
     }
 
-    private fun excludeLogging(requestURI: String): Boolean {
-        return excludedUrls.any { requestURI.startsWith(it) }
-    }
+    private fun excludeLogging(requestURI: String): Boolean = excludedUrls.any { requestURI.startsWith(it) }
 
     private fun getResponseBody(response: ContentCachingResponseWrapper): String {
         var payload: String? = null
