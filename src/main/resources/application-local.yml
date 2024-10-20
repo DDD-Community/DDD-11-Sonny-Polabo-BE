@@ -1,22 +1,14 @@
 spring:
   config:
     activate:
-      on-profile: local
+      on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:3306/polabo?useUnicode=true&charset=utf8mb4&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
-    username: polabo
-    password: polabo
+    url: ENC(pz7EEQu20leZT3uKvGuyvt7YhmLSOJ03yp09o3HSmvk8QqSORYES8Y0iqtjYt3An0uSXVGvd+PdNxXF4h1KXbLm6aMSl2K9gWh2XR5GbIpPAKasqkuha20MGAVckb9NRQC3s0IowzCMvt+jOv0Z1RrAnsfzJy08ZbWe41Slcz/VaQU1hSF6HVohMUrBPApDELlW558sM0jWPfi7NPYNGSlyB4f3bYa0WqjOIAAKPVb3ptvrQwmN7Wg==)
+    username: ENC(6B0VWBlhLIFr2ynq8c8jug==)
+    password: ENC(klG0liQdqtFK3VDxA89xC1ZIYYzUIz08)
     hikari:
       minimum-idle: 2
       maximum-pool-size: 2
-#  jpa:
-#    hibernate:
-#      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-#      ddl-auto: none
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
   jooq:
     sql-dialect: mysql
 
@@ -36,15 +28,18 @@ aws:
     domain: ENC(5AUXhCDMkJlNZa6tI8NIRY3z1kXAtgF0Bb6N3DyujlkOg0iJqK6mV7YYd5rMm1X3)
 
 running:
-  name: local
+  name: dev
 
 jwt:
   access-key: ENC(43L/PYzgJ86ciTJurdPNLgq49TUMtOgF6ke+Z7d4/wEN2WMu2iakpdDlD2C8d9GUNZzFl0Y9ftK4tk545L5TSv05I5OgbYkBGf2m5O51cjUZmSRg897e+5o+Z5aLgwb1+9tcOcawZR/X9lgkA5hTxlzGc7DHf1vMepLDnbaQBk0I56ieDV314JEEqIaeID72)
+  refresh-key: ENC(Tg3e1h7BGfmOmB1kbSHW/Wdi9QQh34DR6XsD6Su7GkMH236k11Ffl9siE2FsDVvJX3MRmF7szRveRfUZR4DbgiYXzSoC35yGQHAiljtt7Cb77QuofiCLpKMetX6B3egTHFpoJWHqrsn1IRYi31rcYLIWnGff0vAMCy3IX2jnI2PzjVgzW0/UjpqMXspUj3rIuDjK926M/fCijH+xgswjVNqJcnQQmIk+5FUTSyut5tY=)
   validity:
-    access-seconds: 86400000
+    access-seconds: ENC(KeRwqvZAr0MfEVmxw8nBQQFEITQ0v/Fl)
+    refresh-seconds: ENC(RvppXDZLdo/Yw2ycPoRogGU9rumQgnQy)
 
 logging:
   discord:
     webhook-uri: ENC(yfeX3WHXQdxkVtasNl5WLv6M/YlN+dVFUurjxGIddstjjipt+KryWKvLu1wDmdGjpuEhUHyaABg4gFWRMk9gNlxSQEE/G1twbuvkOvT0pyFWycVVJ6ryU/v9pDBOS1PSKJY7L3NP66gOGnam6nOvf0Y+F45zZvXj8/sdtR6N798U6fGjFDxOLQ==)
+
   level:
-    root: INFO
+    root: ERROR
