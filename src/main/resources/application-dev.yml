@@ -9,14 +9,6 @@ spring:
     hikari:
       minimum-idle: 2
       maximum-pool-size: 2
-#  jpa:
-#    hibernate:
-#      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
-#      ddl-auto: none
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        format_sql: true
   jooq:
     sql-dialect: mysql
 

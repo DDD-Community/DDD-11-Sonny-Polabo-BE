@@ -21,12 +21,7 @@
 
   <springProfile name="dev">
     <property name="appName" value="dev-api"/>
-
-    <logger name="org.jooq" level="DEBUG" additivity="false">
-      <appender-ref ref="CONSOLE"/>
-    </logger>
-
-    <root level="INFO">
+    <root level="ERROR">
       <appender-ref ref="CONSOLE"/>
     </root>
   </springProfile>
