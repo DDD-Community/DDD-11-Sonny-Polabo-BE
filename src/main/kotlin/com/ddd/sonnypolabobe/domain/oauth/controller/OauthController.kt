@@ -4,10 +4,12 @@ import com.ddd.sonnypolabobe.domain.oauth.service.OauthService
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.validation.Valid
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
+@Tag(name = "1.0.0")
 @RestController
 @RequestMapping("/api/v1/oauth")
 class OauthController(private val oauthService: OauthService) {

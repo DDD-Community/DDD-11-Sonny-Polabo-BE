@@ -5,12 +5,14 @@ import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import com.ddd.sonnypolabobe.global.util.S3Util
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.web.bind.annotation.*
 import java.io.File
 import java.net.URL
 import java.util.*
 
 
+@Tag(name = "1.0.0")
 @RestController
 @RequestMapping("/api/v1/file")
 class FileController(
