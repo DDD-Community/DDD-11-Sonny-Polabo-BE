@@ -1,9 +1,8 @@
 package com.ddd.sonnypolabobe.domain.polaroid.dto
 
-import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
+import com.ddd.sonnypolabobe.domain.polaroid.enumerate.ExtraOption
 import io.swagger.v3.oas.annotations.media.Schema
 import java.time.LocalDateTime
-import java.util.UUID
 
 data class PolaroidGetResponse(
     @field:Schema(description = "폴라로이드 ID", example = "1")
@@ -21,5 +20,5 @@ data class PolaroidGetResponse(
     @field:Schema(description = "생성일시", example = "2021-01-01T00:00:00")
     val createdAt: LocalDateTime?,
     @field:Schema(description = "옵션")
-    val options: Map<PolaroidOption, String>?
+    val options: Map<ExtraOption, String>?
 )

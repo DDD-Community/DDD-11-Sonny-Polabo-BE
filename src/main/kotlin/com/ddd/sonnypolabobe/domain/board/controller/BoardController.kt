@@ -12,19 +12,18 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 import java.util.UUID
 
-@Tag(name = "Board API", description = "보드 관련 API")
 @RestController
 @RequestMapping("/api/v1/boards")
 class BoardController(
     private val boardService: BoardService,
     private val jwtUtil: JwtUtil
 ) {
+    @Tag(name = "1.4.0")
     @Operation(
         summary = "보드 생성", description = """
         보드를 생성합니다.
-        userId는 추후 회원가입 기능이 추가될 것을 대비한 것입니다. 지금은 null로 주세요.
-        
-        userId 데이터는 백에서 채울 것입니다.!
+        options 필드 추가했습니다. 폴라로이드 옵션과 동일하게 구성했습니다. 
+        key : THEMA, value : 프론트에서 지정한 숫자 혹은 식별값
     """
     )
     @PostMapping
@@ -35,11 +34,11 @@ class BoardController(
         return ApplicationResponse.ok(this.boardService.create(request))
     }
 
-    @Tag(name = "1.3.0")
+    @Tag(name = "1.4.0")
     @Operation(
         summary = "보드 조회", description = """
         보드를 조회합니다.
-        DTO 필드 수정했습니다. 스티커 리스트 추가했습니다.
+        DTO 필드 수정했습니다. 옵션이 추가되었습니다.
         
     """
     )
@@ -51,6 +50,7 @@ class BoardController(
         return ApplicationResponse.ok(this.boardService.getById(id, user))
     }
 
+    @Tag(name = "1.0.0")
     @Operation(
         summary = "보드 누적 생성 수 조회", description = """
         보드 누적 생성 수를 조회합니다.
@@ -59,6 +59,7 @@ class BoardController(
     @GetMapping("/total-count")
     fun getTotalCount() = ApplicationResponse.ok(this.boardService.getTotalCount())
 
+    @Tag(name = "1.0.0")
     @Operation(
         summary = "오늘 생성 가능한 보드 수 조회", description = """
         오늘 생성 가능한 보드 수를 조회합니다.
