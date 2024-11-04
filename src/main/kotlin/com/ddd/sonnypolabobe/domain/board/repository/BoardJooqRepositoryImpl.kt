@@ -36,7 +36,7 @@ class BoardJooqRepositoryImpl(
             this.yn = 1
             this.activeyn = 1
             this.userId = request.userId
-            this.options = request.options.let { ObjectMapper().writeValueAsString(it) }
+            this.options = request.options?.let { ObjectMapper().writeValueAsString(it) }
         }
         val result = this.dslContext.insertInto(jBoard)
             .set(insertValue)
