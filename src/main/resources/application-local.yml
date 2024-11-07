@@ -1,7 +1,7 @@
 spring:
   config:
     activate:
-      on-profile: dev
+      on-profile: local
   datasource:
     url: ENC(pz7EEQu20leZT3uKvGuyvt7YhmLSOJ03yp09o3HSmvk8QqSORYES8Y0iqtjYt3An0uSXVGvd+PdNxXF4h1KXbLm6aMSl2K9gWh2XR5GbIpPAKasqkuha20MGAVckb9NRQC3s0IowzCMvt+jOv0Z1RrAnsfzJy08ZbWe41Slcz/VaQU1hSF6HVohMUrBPApDELlW558sM0jWPfi7NPYNGSlyB4f3bYa0WqjOIAAKPVb3ptvrQwmN7Wg==)
     username: ENC(6B0VWBlhLIFr2ynq8c8jug==)
@@ -42,4 +42,4 @@ logging:
     webhook-uri: ENC(yfeX3WHXQdxkVtasNl5WLv6M/YlN+dVFUurjxGIddstjjipt+KryWKvLu1wDmdGjpuEhUHyaABg4gFWRMk9gNlxSQEE/G1twbuvkOvT0pyFWycVVJ6ryU/v9pDBOS1PSKJY7L3NP66gOGnam6nOvf0Y+F45zZvXj8/sdtR6N798U6fGjFDxOLQ==)
 
   level:
-    root: ERROR
+    root: INFO
