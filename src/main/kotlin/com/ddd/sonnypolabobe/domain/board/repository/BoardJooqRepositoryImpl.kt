@@ -154,7 +154,7 @@ class BoardJooqRepositoryImpl(
             .where(jBoard.USER_ID.eq(userId).and(jBoard.YN.eq(1)).and(jBoard.ACTIVEYN.eq(1)))
             .orderBy(jBoard.CREATED_AT.desc())
             .limit(size)
-            .offset(page)
+            .offset(page * size)
             .fetch()
 
         return data.map {
