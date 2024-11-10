@@ -53,13 +53,13 @@ class MyBoardService(
             MyBoardV2Controller.Companion.Filter.OWNER -> {
                 val data = this.boardJooqRepository.findAllByUserId(userId, page - 1, size)
                 val totalCount = this.boardJooqRepository.selectTotalCountByUserId(userId)
-                return PageDto(data, totalCount, page, data.size)
+                return PageDto(data, totalCount, page, size)
             }
 
             MyBoardV2Controller.Companion.Filter.PARTICIPANT -> {
                 val data = this.boardJooqRepository.findAllByParticipant(userId, page - 1, size)
                 val totalCount = this.boardJooqRepository.selectTotalCountByParticipant(userId)
-                return PageDto(data, totalCount, page, data.size)
+                return PageDto(data, totalCount, page, size)
             }
         }
     }
