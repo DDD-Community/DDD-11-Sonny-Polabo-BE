@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api/v1/my/boards")
 class MyBoardController(private val myBoardService: MyBoardService) {
 
+    @Tag(name = "1.0.0")
     @Operation(
         summary = "내 보드 목록 조회", description = """
         내 보드 목록을 조회합니다.
@@ -30,6 +31,7 @@ class MyBoardController(private val myBoardService: MyBoardService) {
     }
 
 
+    @Tag(name = "1.0.0")
     @Operation(
         summary = "내 보드 이름 수정",
         description = """
@@ -47,6 +49,7 @@ class MyBoardController(private val myBoardService: MyBoardService) {
         return ApplicationResponse.ok()
     }
 
+    @Tag(name = "1.1.0")
     @Operation(
         summary = "내 보드 삭제",
         description = """

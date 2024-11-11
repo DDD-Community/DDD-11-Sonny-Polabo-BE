@@ -3,7 +3,7 @@ package com.ddd.sonnypolabobe.domain.polaroid.service
 import com.ddd.sonnypolabobe.domain.board.repository.BoardJooqRepository
 import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
 import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidGetResponse
-import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
+import com.ddd.sonnypolabobe.domain.polaroid.enumerate.ExtraOption
 import com.ddd.sonnypolabobe.domain.polaroid.repository.PolaroidJooqRepository
 import com.ddd.sonnypolabobe.domain.user.dto.UserDto
 import com.ddd.sonnypolabobe.global.exception.ApplicationException
@@ -48,7 +48,7 @@ class PolaroidService(
                 nickname = it.nickname ?: "",
                 isMine = boardWriter.userId == user.id,
                 createdAt = it.createdAt,
-                options = it.options?.let{ ObjectMapper().readValue(it, object : TypeReference<Map<PolaroidOption, String>>() {})}
+                options = it.options?.let{ ObjectMapper().readValue(it, object : TypeReference<Map<ExtraOption, String>>() {})}
             )
         }
     }

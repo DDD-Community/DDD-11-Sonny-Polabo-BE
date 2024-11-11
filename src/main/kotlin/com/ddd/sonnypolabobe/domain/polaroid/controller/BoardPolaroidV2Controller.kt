@@ -1,7 +1,6 @@
 package com.ddd.sonnypolabobe.domain.polaroid.controller
 
 import com.ddd.sonnypolabobe.domain.polaroid.dto.PolaroidCreateRequest
-import com.ddd.sonnypolabobe.domain.polaroid.enumerate.PolaroidOption
 import com.ddd.sonnypolabobe.domain.polaroid.service.PolaroidService
 import com.ddd.sonnypolabobe.global.response.ApplicationResponse
 import com.ddd.sonnypolabobe.global.security.JwtUtil

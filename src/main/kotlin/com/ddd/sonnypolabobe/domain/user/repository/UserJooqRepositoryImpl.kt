@@ -88,6 +88,7 @@ class UserJooqRepositoryImpl(private val dslContext: DSLContext) : UserJooqRepos
         val jUser = User.USER
         this.dslContext.update(jUser)
             .set(jUser.YN, 0)
+            .set(jUser.DELETED_AT, DateConverter.convertToKst(LocalDateTime.now()))
             .where(jUser.ID.eq(id))
             .execute()
     }

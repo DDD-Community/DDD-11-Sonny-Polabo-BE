@@ -2,6 +2,7 @@ package com.ddd.sonnypolabobe.global.config
 
 import io.swagger.v3.oas.models.Components
 import io.swagger.v3.oas.models.OpenAPI
+import io.swagger.v3.oas.models.info.Info
 import io.swagger.v3.oas.models.security.SecurityRequirement
 import io.swagger.v3.oas.models.security.SecurityScheme
 import io.swagger.v3.oas.models.servers.Server
@@ -21,11 +22,15 @@ class SwaggerConfig {
             .addServersItem(Server().url("/"))
             .components(Components().addSecuritySchemes("bearerAuth", securityScheme))
             .security(listOf(securityRequirement))
+            .info(Info().version("1.4.0").description("5차 MVP"))
     }
 
     private fun getSecurityScheme(): SecurityScheme =
-        SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("Bearer").bearerFormat("JWT")
-            .`in`(SecurityScheme.In.HEADER).name("Authorization")
+        SecurityScheme()
+            .type(SecurityScheme.Type.HTTP)
+            .scheme("Bearer").bearerFormat("JWT")
+            .`in`(SecurityScheme.In.HEADER)
+            .name("Authorization")
 
 
     private fun getSecurityRequirement(): SecurityRequirement =

@@ -47,11 +47,11 @@ class JwtExceptionFilter(
                         "Parameters - ${getRequestParams(request)} \n" +
                         "Request body - ${getRequestBody(requestWrapper)} \n" +
                         "Response body - ${getResponseBody(responseWrapper)}"
-                logger().error(message)
                 if (responseWrapper.status >= 400 && getResponseBody(responseWrapper).contains(
                         CustomErrorCode.INTERNAL_SERVER_EXCEPTION.message
                     )
                 ) {
+                    logger().error(message)
                     this.discordApiClient.sendErrorLog(message)
                 }
             }
